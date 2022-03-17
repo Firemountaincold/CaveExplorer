@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CaveExplorer", "CaveExplorer\CaveExplorer.csproj", "{EA573139-2864-4816-99F5-CC4509E5D33E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EA573139-2864-4816-99F5-CC4509E5D33E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA573139-2864-4816-99F5-CC4509E5D33E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA573139-2864-4816-99F5-CC4509E5D33E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA573139-2864-4816-99F5-CC4509E5D33E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {51195F8A-2E91-45CE-BFF1-A99F158699FD}
+	EndGlobalSection
+EndGlobal

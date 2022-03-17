@@ -1,0 +1,15 @@
+D:\GitHub\CaveExplorer\CaveExplorer\bin\Debug\CaveExplorer.exe.config
+D:\GitHub\CaveExplorer\CaveExplorer\bin\Debug\CaveExplorer.exe
+D:\GitHub\CaveExplorer\CaveExplorer\bin\Debug\CaveExplorer.pdb
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.csproj.AssemblyReference.cache
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.csproj.SuggestedBindingRedirects.cache
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.Properties.Resources.resources
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.WelcomeForm.resources
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.csproj.GenerateResource.cache
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.csproj.CoreCompileInputs.cache
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.exe
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.pdb
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.GameForm.resources
+D:\GitHub\CaveExplorer\CaveExplorer\bin\Debug\Newtonsoft.Json.dll
+D:\GitHub\CaveExplorer\CaveExplorer\bin\Debug\Newtonsoft.Json.xml
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.csproj.CopyComplete
