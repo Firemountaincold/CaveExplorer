@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
@@ -19,16 +19,55 @@ namespace CaveExplorer
         public List<Caves> fightcaves=new List<Caves>();
         public List<Caves> findcaves = new List<Caves>();
         public List<Caves> eventcaves = new List<Caves>();
+        public List<Label> labels = new List<Label>();
+        public List<LinkLabel> links = new List<LinkLabel>();
+        ToolTip toolTip = new ToolTip();
+        public int[] linklabelevent = new int[10];
         public int steps = 0;
         public GameForm(Charactor p)
         {
             InitializeComponent();
             player = p;
+            LoadLinkLabel();
             LoadItems();
             LoadCaves();
             FreshPhoto();
             FreshStatus();
             FreshBag();
+        }
+
+        public void LoadLinkLabel()
+        {
+            //创建列表
+            labels.Add(label1);
+            labels.Add(label2);
+            labels.Add(label3);
+            labels.Add(label4);
+            labels.Add(label5);
+            labels.Add(label6);
+            labels.Add(label7);
+            labels.Add(label8);
+            labels.Add(label9);
+            labels.Add(label10);
+            toolTip.AutoPopDelay = 5000;
+            toolTip.InitialDelay = 100;
+            toolTip.ReshowDelay = 500;
+            toolTip.ShowAlways = true;
+            toolTip.IsBalloon = true;
+            links.Add(linkLabel1);
+            links.Add(linkLabel2);
+            links.Add(linkLabel3);
+            links.Add(linkLabel4);
+            links.Add(linkLabel5);
+            links.Add(linkLabel6);
+            links.Add(linkLabel7);
+            links.Add(linkLabel8);
+            links.Add(linkLabel9);
+            links.Add(linkLabel10);
+            for (int i = 0; i < linklabelevent.Length; i++) 
+            {
+                linklabelevent[i] = 0;
+            }
         }
 
         public void LoadItems()
@@ -167,23 +206,65 @@ namespace CaveExplorer
                     "\r\n状态：已死亡";
                 labelstatus.Text = status_now;
                 FreshPhoto();
+                hpBar.Value = 0;
                 buttonNext.Enabled = false;
+            }
+        }
+
+        public void ClearAllEvents()
+        {
+            // 清除事件绑定的函数
+            for(int i = 0; i < linklabelevent.Length; i++)
+            {
+                if (linklabelevent[i] == 1)
+                {
+                    links[i].Click -= new EventHandler(UseItem);
+                    linklabelevent[i] = 0;
+                }
+                else if (linklabelevent[i] == 2)
+                {
+                    links[i].Click -= new EventHandler(ThrowItem);
+                    linklabelevent[i] = 0;
+                }
             }
         }
 
         public void FreshBag()
         {
             //刷新背包
-            labelbagstr.Text = player.BagString();
-            comboBoxitem.Items.Clear();
-            comboBoxitem.SelectedItem = null;
-            comboBoxitem.Text = null;
-            foreach(var i in player.bag)
+            player.BagString(labels, labelbuff);
+            ClearAllEvents();                
+            foreach(var l in links)
             {
-                if(i.type==ItemType.Use)
+                l.Visible = false;
+            }
+            for (int i = 0; i < player.bag.Count; i++)
+            {
+                if(player.bag[i].type==ItemType.Use)
                 {
-                    comboBoxitem.Items.Add(i.name);
+                    links[i].Text = "使用";
+                    links[i].Click += new EventHandler(UseItem);
+                    linklabelevent[i] = 1;
+                    links[i].Visible = true;
                 }
+                else if(player.bag[i].type==ItemType.Auto)
+                {
+                    links[i].Text = "丢弃";
+                    links[i].Click += new EventHandler(ThrowItem);
+                    linklabelevent[i] = 2;
+                    links[i].Visible = true;
+                }
+            }
+            AddToolTips();
+        }
+
+        public void AddToolTips()
+        {
+            //生成物品说明
+            toolTip.RemoveAll();
+            for(int i = 0; i < player.bag.Count; i++)
+            {               
+                toolTip.SetToolTip(labels[i], player.bag[i].TooltipString());
             }
         }
 
@@ -269,19 +350,27 @@ namespace CaveExplorer
             }
             else if (newcave.type == CaveType.Event)
             {
-                infomation.AppendText(newcave.events.EventRun());
+                infomation.AppendText(newcave.events.EventRun(player));
             }
             FreshBag();
             FreshStatus();
         }
 
-        private void buttonUseItem_Click(object sender, EventArgs e)
+        private void UseItem(object sender, EventArgs e)
         {
             //使用物品
-            if (comboBoxitem.Items.Count!=0 && comboBoxitem.Items[comboBoxitem.SelectedIndex] != null)
-            {
-                infomation.AppendText(player.UseItem(comboBoxitem.Items[comboBoxitem.SelectedIndex].ToString()));
-            }
+            int index = links.IndexOf((LinkLabel)sender);
+            infomation.AppendText(player.UseItem(index));
+            FreshBag();
+            FreshStatus();
+        }
+
+        private void ThrowItem(object sender, EventArgs e)
+        {
+            //丢弃物品
+            int index = links.IndexOf((LinkLabel)sender);
+            infomation.AppendText(player.bag[index].RemoveItem(player));
+            player.bag.RemoveAt(index);
             FreshBag();
             FreshStatus();
         }

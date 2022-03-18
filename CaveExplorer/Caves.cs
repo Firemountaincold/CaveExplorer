@@ -205,19 +205,211 @@ namespace CaveExplorer
     /// </summary>
     public class Events
     {
+        public string name;
         string description;
         public int step;
+        public CaveResults result;
 
+        public Events(Events eve)
+        {   
+            name = eve.name;
+            description = eve.description;
+            step = eve.step;
+            result = new CaveResults(eve.result);
+        }
         public Events(string eventline)
         {
             string[] temp = eventline.Split(',');
-            description = temp[0];
-            step = Convert.ToInt32(temp[1]);
+            name = temp[0];
+            description = temp[1];
+            step = Convert.ToInt32(temp[2]);
+            result = new CaveResults();
+            result.hpchange = Convert.ToInt32(temp[3]);
+            result.atkchange = Convert.ToInt32(temp[4]);
+            result.agichange = Convert.ToInt32(temp[5]);
+            result.defchange = Convert.ToInt32(temp[6]);
+            result.luckchange = Convert.ToInt32(temp[7]);
+            result.maxhpchange = Convert.ToInt32(temp[8]);
+            result.maxbagchange = Convert.ToInt32(temp[9]);
+            result.timelast = Convert.ToInt32(temp[10]);
+            if (temp[11] == "Happy")
+            {
+                result.moodchange = Mood.Happy;
+            }
+            else if(temp[11] == "Angry")
+            {
+                result.moodchange = Mood.Angry;
+            }
+            else if (temp[11] == "Sad")
+            {
+                result.moodchange = Mood.Sad;
+            }
+            else if (temp[11] == "God")
+            {
+                result.moodchange = Mood.God;
+            }
+            else
+            {
+                result.moodchange = Mood.None;
+            }
         }
 
-        public string EventRun()
+        public string EventRun(Charactor player)
         {
-            return "[事件信息]" + description + "\r\n";
+            int i = 0;
+            string info = player.name + "的";
+            if (result.maxhpchange > 0)
+            {
+                i++;
+                player.maxhp += result.maxhpchange;
+                info += "生命上限增加了" + result.maxhpchange.ToString() + "点，";
+            }
+            if (result.hpchange != 0)
+            {
+                i++;
+                info += "生命";
+                if (result.hpchange < 0)
+                {
+                    player.hp += result.hpchange;
+                    info += "减少了" + (-result.hpchange).ToString() + "点，";
+                }
+                else if (player.maxhp - player.hp > result.hpchange)
+                {
+                    player.hp += result.hpchange;
+                    info += "恢复了" + result.hpchange.ToString() + "点，";
+                }
+                else if (player.maxhp - player.hp <= result.hpchange && player.maxhp != player.hp)
+                {
+                    info += "恢复了" + (player.maxhp - player.hp).ToString() + "点，";
+                    player.hp = player.maxhp;
+                }
+                else
+                {
+                    info += "已满，无法恢复";
+                }
+            }
+            if (result.atkchange != 0)
+            {
+                i++;
+                player.atk += result.atkchange;
+                if (result.atkchange > 0)
+                {
+                    info += "攻击增加了" + result.atkchange.ToString() + "点，";
+                }
+                else
+                {
+                    info += "攻击减少了" + (-result.atkchange).ToString() + "点，";
+                }
+            }
+            if (result.agichange != 0)
+            {
+                i++;
+                player.agi += result.agichange;
+                if (result.agichange > 0)
+                {
+                    info += "敏捷增加了" + result.agichange.ToString() + "点，";
+                }
+                else
+                {
+                    info += "敏捷减少了" + (-result.agichange).ToString() + "点，";
+                }
+            }
+            if (result.defchange != 0)
+            {
+                i++;
+                player.def += result.defchange;
+                if (result.defchange > 0)
+                {
+                    info += "防御增加了" + result.defchange.ToString() + "点，";
+                }
+                else
+                {
+                    info += "防御减少了" + (-result.defchange).ToString() + "点，";
+                }
+            }
+            if (result.luckchange != 0)
+            {
+                i++;
+                player.luck += result.luckchange;
+                if (result.luckchange > 0)
+                {
+                    info += "幸运增加了" + result.luckchange.ToString() + "点，";
+                }
+                else
+                {
+                    info += "幸运减少了" + (-result.luckchange).ToString() + "点，";
+                }
+            }
+            if (result.maxbagchange > 0)
+            {
+                i++;
+                player.maxbag += result.maxbagchange;
+                info += "背包上限增加了" + result.maxbagchange.ToString() + "格，";
+            }
+            if (result.timelast > 0)
+            {
+                player.events.Add(new Events(this));
+                info += "持续时间为" + result.timelast + "回合，";
+            }
+            if (result.moodchange != player.mood && result.moodchange != Mood.None) 
+            {
+                i++;
+                info += player.name + "的心情变成了";
+                switch (player.mood)
+                {
+                    case Mood.Happy:
+                        info += "开心（攻击小幅提升）,";
+                        break;
+                    case Mood.Angry:
+                        info += "愤怒（攻击提升，敏捷下降）,";
+                        break;
+                    case Mood.Sad:
+                        info += "悲伤（防御下降）,";
+                        break;
+                    case Mood.God:
+                        info += "天神下凡（攻击、防御大幅提升）,";
+                        break;
+                }
+            }
+            if (i != 0)
+            {
+                info += "效果来自事件：" + name + "。\r\n";
+            }
+            else
+            {
+                info = "";
+            }
+            return "[事件信息]" + description + "\r\n" + info;
+        }
+        /// <summary>
+        /// 去除事件效果
+        /// </summary>
+        /// <param name="player">角色</param>
+        public string RemoveResults(Charactor player)
+        {
+            player.hp -= result.maxbagchange;
+            player.atk -= result.atkchange;
+            player.agi -= result.agichange;
+            player.def -= result.defchange;
+            player.luck -= result.luckchange;
+            player.maxhp -= result.maxhpchange;
+            if (player.hp > player.maxhp)
+            {
+                player.hp = player.maxhp;
+            }
+            player.maxbag -= result.maxbagchange;
+            return "[事件信息]" + name + "事件的效果消失了。\r\n";
+        }
+        /// <summary>
+        /// 存档用字符串
+        /// </summary>
+        /// <returns>存档字符串</returns>
+        public string SaveString()
+        {
+            string save = name + "," + description + "," + step.ToString() + "," + result.hpchange + "," + result.atkchange +
+                "," + result.agichange + "," + result.defchange + "," + result.luckchange + "," + result.maxhpchange +
+                "," + result.maxbagchange + "," + result.timelast + "," + result.moodchange.ToString() + "\r\n";
+            return save;
         }
     }
 
@@ -232,5 +424,20 @@ namespace CaveExplorer
         public int maxbagchange;
         public int timelast;
         public Mood moodchange;
+
+        public CaveResults() { }
+
+        public CaveResults(CaveResults ir)
+        {
+            hpchange = ir.hpchange;
+            atkchange = ir.atkchange;
+            agichange = ir.agichange;
+            defchange = ir.defchange;
+            luckchange = ir.luckchange;
+            maxhpchange = ir.maxhpchange;
+            maxbagchange = ir.maxbagchange;
+            timelast = ir.timelast;
+            moodchange = ir.moodchange;
+        }
     }
 }

@@ -45,11 +45,23 @@ namespace CaveExplorer
                 string[] read = File.ReadAllLines(path);
                 int step = Convert.ToInt32(read[0]);
                 Charactor player = new Charactor(read[1]);
+                bool item = true;
                 for(int i = 2; i < read.Length; i++)
                 {
                     if (read[i].Length > 0)
                     {
-                        player.bag.Add(new Items(read[i]));
+                        if(read[i]=="1995")
+                        {
+                            item = false;
+                        }
+                        else if (item)
+                        {
+                            player.bag.Add(new Items(read[i]));
+                        }
+                        else
+                        {
+                            player.events.Add(new Events(read[i]));
+                        }
                     }
                 }
                 GameForm gf = new GameForm(player);

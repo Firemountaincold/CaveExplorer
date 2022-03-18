@@ -23,7 +23,8 @@ namespace CaveExplorer
         Happy=0,
         Angry,
         Sad,
-        God
+        God,
+        None
     }
     /// <summary>
     /// 角色类
@@ -36,6 +37,7 @@ namespace CaveExplorer
         //背包
         public int maxbag;
         public List<Items> bag=new List<Items>();
+        public List<Events> events = new List<Events>();
         //血量
         public int maxhp;
         public int hp;
@@ -125,39 +127,52 @@ namespace CaveExplorer
                     }
                 }
             }
+            for (int i = 0; i < events.Count; i++)
+            {
+                if (events[i].result.timelast == 1)
+                {
+                    info += events[i].RemoveResults(this);
+                    events.RemoveAt(i);
+                }
+                else
+                {
+                    events[i].result.timelast--;
+                }
+            }
             return info;
         }
         /// <summary>
         /// 获取背包字符串
         /// </summary>
         /// <returns>背包字符串</returns>
-        public string BagString()
+        public void BagString(List<System.Windows.Forms.Label> labels, System.Windows.Forms.Label buff)
         {
-            if(bag.Count==0)
+            for (int i = 0; i < bag.Count; i++)
             {
-                return "背包空空如也。";
-            }
-            else
-            {
-                string str = "";
-                for(int i = 0; i < bag.Count; i++)
+                labels[i].Text = bag[i].name;
+                if (bag[i].type == ItemType.Use)
                 {
-                    str += bag[i].name;
-                    if(bag[i].type==ItemType.Use)
-                    {
-                        str += "(可使用)";
-                    }
-                    else if(bag[i].type==ItemType.Auto)
-                    {
-                        str += "(已装备)";
-                    }
-                    else if(bag[i].type ==ItemType.Hold)
-                    {
-                        str += "(剩余" + bag[i].result.timelast.ToString() + "回合)";
-                    }
-                    str += "\r\n";
+                    labels[i].Text += "(可使用)";
                 }
-                return str;
+                else if (bag[i].type == ItemType.Auto)
+                {
+                    labels[i].Text += "(已装备)";
+                }
+                else if (bag[i].type == ItemType.Hold)
+                {
+                    labels[i].Text += "(剩余" + bag[i].result.timelast.ToString() + "回合)";
+                }
+            }
+            for(int i = bag.Count; i < maxbag; i++)
+            {
+                labels[i].Text = "(空)";
+            }
+            buff.Text = "";
+            for (int i = 0; i < events.Count; i++)
+            {
+                buff.Text += events[i].name;
+                buff.Text += "(剩余" + events[i].result.timelast.ToString() + "回合)";
+                buff.Text += "\r\n";
             }
         }
         /// <summary>
@@ -169,10 +184,11 @@ namespace CaveExplorer
         public string GetItem(Items item, int situation)
         {
             string info = "";
+            Items i = new Items(item);
             if (bag.Count < maxbag)
             {
-                bag.Add(new Items(item));
-                if (item.type != ItemType.Use)
+                bag.Add(i);
+                if (i.type != ItemType.Use)
                 {
                     if (situation == 0)
                     {
@@ -182,7 +198,7 @@ namespace CaveExplorer
                     {
                         info += "[探索信息]在洞穴中探索时发现了物品！";
                     }
-                    info += item.GetItem(this);
+                    info += i.GetItem(this);
                 }
                 else
                 {
@@ -194,7 +210,7 @@ namespace CaveExplorer
                     {
                         info += "[探索信息]在洞穴中探索时";
                     }
-                    info += "获得了物品：" + item.name + "。\r\n";
+                    info += "获得了物品：" + i.name + "。\r\n";
                 }
             }
             else
@@ -207,7 +223,7 @@ namespace CaveExplorer
                 {
                     info += "[探索信息]在洞穴中探索时";
                 }
-                info += "发现了物品" + item.name + "，但背包已满，所以扔掉了。\r\n";
+                info += "发现了物品" + i.name + "，但背包已满，所以扔掉了。\r\n";
             }
             return info;
         }
@@ -216,18 +232,11 @@ namespace CaveExplorer
         /// </summary>
         /// <param name="itemname">物品名</param>
         /// <returns>物品信息</returns>
-        public string UseItem(string itemname)
+        public string UseItem(int index)
         {
             string info = "[物品信息]";
-            for(int i=0;i<bag.Count;i++)
-            {
-                if (bag[i].name == itemname)
-                {
-                    info += "使用了物品：" + bag[i].GetItem(this);
-                    bag.RemoveAt(i);
-                    break;
-                }
-            }
+            info += "使用了物品：" + bag[index].GetItem(this);
+            bag.RemoveAt(index);
             return info;
         }
         /// <summary>
@@ -240,6 +249,11 @@ namespace CaveExplorer
                 agi.ToString() + "," + def.ToString() + "," + luck.ToString() + "," + job.ToString() + "," +
                 mood.ToString() + "," + maxbag.ToString() + "\r\n";
             foreach(var i in bag)
+            {
+                save += i.SaveString();
+            }
+            save += "1995\r\n";
+            foreach(var i in events)
             {
                 save += i.SaveString();
             }
@@ -273,7 +287,7 @@ namespace CaveExplorer
             ID = i.ID;
             name = i.name;
             type = i.type;
-            result = i.result;
+            result = new ItemResult(i.result);
         }
         /// <summary>
         /// 从数据读取创建
@@ -327,7 +341,7 @@ namespace CaveExplorer
                     player.hp += result.hpchange;
                     info += "恢复了" + result.hpchange.ToString() + "点，";
                 }
-                else if (player.maxhp - player.hp < result.hpchange && player.maxhp != player.hp) 
+                else if (player.maxhp - player.hp <= result.hpchange && player.maxhp != player.hp) 
                 {
                     info += "恢复了" + (player.maxhp - player.hp).ToString() + "点，";
                     player.hp = player.maxhp;
@@ -390,6 +404,48 @@ namespace CaveExplorer
             return "[物品信息]" + name + "的效果消失了。\r\n";
         }
         /// <summary>
+        /// 说明用字符串
+        /// </summary>
+        /// <returns>字符串</returns>
+        public string TooltipString()
+        {
+            string info = name + "\r\n";
+            if (result.maxhpchange > 0)
+            {
+                info += "生命上限+" + result.maxhpchange.ToString() + "\r\n";
+            }
+            if (result.hpchange > 0)
+            {
+                info += "生命值+" + result.hpchange.ToString() + "\r\n";
+            }
+            if (result.atkchange > 0)
+            {
+                info += "攻击+" + result.atkchange.ToString() + "\r\n";
+            }
+            if (result.agichange > 0)
+            {
+                info += "敏捷+" + result.agichange.ToString() + "\r\n";
+            }
+            if (result.defchange > 0)
+            {
+                info += "防御+" + result.defchange.ToString() + "\r\n";
+            }
+            if (result.luckchange > 0)
+            {
+                info += "幸运+" + result.luckchange.ToString() + "\r\n";
+            }
+            if (result.maxbagchange > 0)
+            {
+                info += "背包上限+" + result.maxbagchange.ToString() + "格\r\n";
+            }
+            if (result.timelast > 0)
+            {
+                info += "持续" + result.timelast + "回合\r\n";
+            }
+            info += "物品ID：" + ID.ToString();
+            return info;
+        }
+        /// <summary>
         /// 存档用字符串
         /// </summary>
         /// <returns>存档字符串</returns>
@@ -414,5 +470,19 @@ namespace CaveExplorer
         public int maxhpchange;
         public int maxbagchange;
         public int timelast;
+
+        public ItemResult() { }
+
+        public ItemResult(ItemResult ir)
+        {
+            hpchange = ir.hpchange;
+            atkchange = ir.atkchange;
+            agichange = ir.agichange;
+            defchange = ir.defchange;
+            luckchange = ir.luckchange;
+            maxhpchange = ir.maxhpchange;
+            maxbagchange = ir.maxbagchange;
+            timelast = ir.timelast;
+        }
     }
 }
