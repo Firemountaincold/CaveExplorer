@@ -1,7 +1,7 @@
-# CaveExplorer
+# 洞穴探险(CaveExplorer)
 一个简单的rougelike游戏。
 ### 界面：
-
+![0 2](https://user-images.githubusercontent.com/28642068/159113187-484ad5c3-260a-414d-bf76-84247e257940.png)
 ### 更新文档： 
 #### 2022.3.17：
 ##### 0.1：
