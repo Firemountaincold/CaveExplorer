@@ -48,6 +48,8 @@ namespace CaveExplorer
         public int luck;
         //心情
         public Mood mood;
+        //数据
+        public DataStats stats;
         /// <summary>
         /// 创建角色
         /// </summary>
@@ -64,9 +66,10 @@ namespace CaveExplorer
             def = features[3];
             luck = features[4];
             mood = Mood.Happy;
+            stats = new DataStats();
         }
 
-        public Charactor(string chaline)
+        public Charactor(string chaline, string dataline)
         {
             string[] temp = chaline.Split(',');
             name = temp[0];
@@ -105,6 +108,7 @@ namespace CaveExplorer
                 mood = Mood.God;
             }
             maxbag = Convert.ToInt32(temp[9]);
+            stats = new DataStats(dataline);
         }
         /// <summary>
         /// 下一回合
@@ -152,15 +156,14 @@ namespace CaveExplorer
                 labels[i].Text = bag[i].name;
                 if (bag[i].type == ItemType.Use)
                 {
-                    labels[i].Text += "(可使用)";
                 }
                 else if (bag[i].type == ItemType.Auto)
                 {
-                    labels[i].Text += "(已装备)";
+                    labels[i].Text += "(装备)";
                 }
                 else if (bag[i].type == ItemType.Hold)
                 {
-                    labels[i].Text += "(剩余" + bag[i].result.timelast.ToString() + "回合)";
+                    labels[i].Text += "(" + bag[i].result.timelast.ToString() + ")";
                 }
             }
             for(int i = bag.Count; i < maxbag; i++)
@@ -171,7 +174,7 @@ namespace CaveExplorer
             for (int i = 0; i < events.Count; i++)
             {
                 buff.Text += events[i].name;
-                buff.Text += "(剩余" + events[i].result.timelast.ToString() + "回合)";
+                buff.Text += "(" + events[i].result.timelast.ToString() + ")";
                 buff.Text += "\r\n";
             }
         }
@@ -185,6 +188,39 @@ namespace CaveExplorer
         {
             string info = "";
             Items i = new Items(item);
+            for(int j = 0; j < bag.Count; j++)
+            {
+                if (item.name == bag[j].name)
+                {
+                    if (item.type == ItemType.Auto)
+                    {
+                        if (situation == 0)
+                        {
+                            info += "[战斗信息]从怪物的尸体上";
+                        }
+                        else if (situation == 1)
+                        {
+                            info += "[探索信息]在洞穴中探索时";
+                        }
+                        info += "获得了物品：" + i.name + "，因为不能重复装备同种物品，所以自动丢弃了。\r\n";
+                        return info;
+                    }
+                    else if (item.type == ItemType.Hold)
+                    {
+                        if (situation == 0)
+                        {
+                            info += "[战斗信息]从怪物的尸体上";
+                        }
+                        else if (situation == 1)
+                        {
+                            info += "[探索信息]在洞穴中探索时";
+                        }
+                        info += "获得了物品：" + i.name + "，延长了当前状态的时间。\r\n";
+                        bag[j].result.timelast += item.result.timelast;
+                        return info;
+                    }
+                }
+            }
             if (bag.Count < maxbag)
             {
                 bag.Add(i);
@@ -248,6 +284,7 @@ namespace CaveExplorer
             string save = name + "," + hp.ToString() + "," + maxhp.ToString() + "," + atk.ToString() + "," +
                 agi.ToString() + "," + def.ToString() + "," + luck.ToString() + "," + job.ToString() + "," +
                 mood.ToString() + "," + maxbag.ToString() + "\r\n";
+            save += stats.SaveString();
             foreach(var i in bag)
             {
                 save += i.SaveString();
@@ -327,6 +364,7 @@ namespace CaveExplorer
         /// <returns>物品使用结果信息</returns>
         public string GetItem(Charactor player)
         {
+            player.stats.items++;
             string info = player.name + "的";
             if(result.maxhpchange>0)
             {
@@ -348,7 +386,7 @@ namespace CaveExplorer
                 }
                 else
                 {
-                    info += "已满，无法恢复";
+                    info += "已满，无法恢复，";
                 }
             }
             if(result.atkchange>0)
@@ -483,6 +521,91 @@ namespace CaveExplorer
             maxhpchange = ir.maxhpchange;
             maxbagchange = ir.maxbagchange;
             timelast = ir.timelast;
+        }
+    }
+    /// <summary>
+    /// 冒险数据统计
+    /// </summary>
+    public class DataStats
+    {
+        public int items = 0;
+        public int useitems = 0;
+        public int dropitems = 0;
+        public int events = 0;
+        public List<string> enemy = new List<string>();
+        public List<int> enemykill = new List<int>();
+
+        public DataStats() { }
+        /// <summary>
+        /// 字符串初始化
+        /// </summary>
+        /// <param name="dataline">存档字符串</param>
+        public DataStats(string dataline)
+        {
+            string[] temp = dataline.Split(',');
+            items = Convert.ToInt32(temp[0]);
+            useitems = Convert.ToInt32(temp[1]);
+            dropitems = Convert.ToInt32(temp[2]);
+            events = Convert.ToInt32(temp[3]);
+            for(int i = 4; i < temp.Length - 1 && temp[i + 1].Length > 0; i = i + 2)
+            {
+                enemy.Add(temp[i]);
+                enemykill.Add(Convert.ToInt32(temp[i + 1]));
+            }
+        }
+        /// <summary>
+        /// 添加敌人数据
+        /// </summary>
+        /// <param name="fightcave">洞穴数据</param>
+        public void AddEnemy(Caves fightcave)
+        {
+            for (int i = 0; i < enemy.Count; i++)
+            {
+                if (fightcave.fights.demonname == enemy[i])
+                {
+                    enemykill[i]++;
+                    return;
+                }
+            }
+            enemy.Add(fightcave.fights.demonname);
+            enemykill.Add(1);
+        }
+        /// <summary>
+        /// 存档字符串
+        /// </summary>
+        /// <returns>字符串</returns>
+        public string SaveString()
+        {
+            string info = items.ToString() + "," + useitems.ToString() + "," + dropitems.ToString()
+                + "," + events.ToString();
+            for (int i = 0; i < enemy.Count; i++)
+            {
+                info += "," + enemy[i] + "," + enemykill[i];
+            }
+            info += "\r\n";
+            return info;
+        }
+        /// <summary>
+        /// 数据字符串
+        /// </summary>
+        /// <returns>字符串</returns>
+        public string StatsString()
+        {
+            string info = "获得物品：" + items.ToString() + "\r\n使用物品：" + useitems.ToString() +
+                "\r\n丢弃物品：" + dropitems.ToString() + "\r\n遭遇事件：" + events.ToString() +
+                "\r\n遭遇敌人：";
+            if (enemy.Count > 0)
+            {
+                for (int i = 0; i < enemy.Count; i++)
+                {
+                    info += "\r\n    " + enemy[i] + "：" + enemykill[i];
+                }
+            }
+            else
+            {
+                info += "暂无";
+            }
+            return info;
         }
     }
 }

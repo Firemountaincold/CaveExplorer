@@ -17,6 +17,8 @@ namespace CaveExplorer
         public WelcomeForm()
         {
             InitializeComponent();
+            groupBoxfeature.BackColor = Color.Transparent;
+            groupBoxjob.BackColor = Color.Transparent;
         }
         
         private void buttonroll_Click(object sender, EventArgs e)
@@ -44,9 +46,9 @@ namespace CaveExplorer
             {
                 string[] read = File.ReadAllLines(path);
                 int step = Convert.ToInt32(read[0]);
-                Charactor player = new Charactor(read[1]);
+                Charactor player = new Charactor(read[1], read[2]);
                 bool item = true;
-                for(int i = 2; i < read.Length; i++)
+                for(int i = 3; i < read.Length; i++)
                 {
                     if (read[i].Length > 0)
                     {

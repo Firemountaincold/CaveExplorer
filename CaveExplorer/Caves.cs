@@ -55,7 +55,7 @@ namespace CaveExplorer
     /// </summary>
     public class Fights
     {
-        string demonname;
+        public string demonname;
         int hp;
         int atk;
         int agi;
@@ -125,6 +125,10 @@ namespace CaveExplorer
                 if (player.agi + agichange >= agi)
                 {
                     int damage = (player.atk + atkchange) * 2 - def + r.Next(0, 5) - 2;
+                    if (damage < 0) 
+                    {
+                        damage = 0;
+                    }
                     damage /= 2;
                     hp -= damage;
                     info += player.name + "对" + demonname + "造成了" + damage.ToString() + "点伤害";
@@ -138,6 +142,10 @@ namespace CaveExplorer
                         break;
                     }
                     int reverse = atk * 2 - (player.def + defchange) + r.Next(0, 5) - 2;
+                    if (reverse < 0)
+                    {
+                        reverse = 0;
+                    }
                     reverse /= 2;
                     player.hp -= reverse;
                     info += "，" + demonname + "的反击造成了" + reverse.ToString() + "点伤害";
@@ -151,6 +159,10 @@ namespace CaveExplorer
                 else
                 {
                     int damage = atk * 2 - (player.def + defchange) + r.Next(0, 5) - 2;
+                    if (damage < 0)
+                    {
+                        damage = 0;
+                    }
                     damage /= 2;
                     player.hp -= damage;
                     info += demonname + "对" + player.name + "造成了" + damage.ToString() + "点伤害";
@@ -160,6 +172,10 @@ namespace CaveExplorer
                         break;
                     }
                     int reverse = (player.atk + atkchange) * 2 - def + r.Next(0, 5) - 2;
+                    if (reverse < 0) 
+                    {
+                        reverse = 0;
+                    }
                     reverse /= 2;
                     hp -= reverse;
                     info += "，" + player.name + "的反击造成了" + reverse.ToString() + "点伤害";
@@ -285,7 +301,7 @@ namespace CaveExplorer
                 }
                 else
                 {
-                    info += "已满，无法恢复";
+                    info += "已满，无法恢复，";
                 }
             }
             if (result.atkchange != 0)
@@ -355,7 +371,8 @@ namespace CaveExplorer
             {
                 i++;
                 info += player.name + "的心情变成了";
-                switch (player.mood)
+                player.mood = result.moodchange;
+                switch (result.moodchange)
                 {
                     case Mood.Happy:
                         info += "开心（攻击小幅提升）,";

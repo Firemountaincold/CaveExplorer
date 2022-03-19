@@ -28,12 +28,6 @@ namespace CaveExplorer
         {
             InitializeComponent();
             player = p;
-            LoadLinkLabel();
-            LoadItems();
-            LoadCaves();
-            FreshPhoto();
-            FreshStatus();
-            FreshBag();
         }
 
         public void LoadLinkLabel()
@@ -206,6 +200,7 @@ namespace CaveExplorer
                     "\r\n状态：已死亡";
                 labelstatus.Text = status_now;
                 FreshPhoto();
+                ClearAllEvents();
                 hpBar.Value = 0;
                 buttonNext.Enabled = false;
             }
@@ -245,17 +240,35 @@ namespace CaveExplorer
                     links[i].Text = "使用";
                     links[i].Click += new EventHandler(UseItem);
                     linklabelevent[i] = 1;
-                    links[i].Visible = true;
                 }
                 else if(player.bag[i].type==ItemType.Auto)
                 {
                     links[i].Text = "丢弃";
                     links[i].Click += new EventHandler(ThrowItem);
                     linklabelevent[i] = 2;
-                    links[i].Visible = true;
                 }
+                else if (player.bag[i].type == ItemType.Hold)
+                {
+                    links[i].Text = "放弃";
+                    links[i].Click += new EventHandler(ThrowItem);
+                    linklabelevent[i] = 2;
+                }
+                links[i].Visible = true;
             }
             AddToolTips();
+        }
+
+        public void FreshStep(int[] caveindex)
+        {
+            //刷新步数
+            if (labelstep.BackColor != Color.Transparent)
+            {
+                labelstep.BackColor = Color.Transparent;
+            }
+            string info = "步数：" + steps.ToString();
+            info += "\r\n\r\n目前可遇到的洞穴：\r\n    战斗：" + caveindex[0] + "\r\n    探索：" +
+                caveindex[1] + "\r\n    遭遇：" + caveindex[2];
+            labelstep.Text = info;
         }
 
         public void AddToolTips()
@@ -331,14 +344,16 @@ namespace CaveExplorer
             if(index < 60)
             {
                 newcave = new Caves(fightcaves[rr.Next(0, caveindex[0])]);
+                player.stats.AddEnemy(newcave);
             }
             else if(index<85)
             {
-                newcave = new Caves(eventcaves[rr.Next(0, caveindex[1])]);
+                newcave = new Caves(eventcaves[rr.Next(0, caveindex[2])]);
+                player.stats.events++;
             }
             else
             {
-                newcave = new Caves(findcaves[rr.Next(0, caveindex[2])]);
+                newcave = new Caves(findcaves[rr.Next(0, caveindex[1])]);
             }
             if (newcave.type == CaveType.Fight)
             {
@@ -354,11 +369,13 @@ namespace CaveExplorer
             }
             FreshBag();
             FreshStatus();
+            FreshStep(caveindex);
         }
 
         private void UseItem(object sender, EventArgs e)
         {
             //使用物品
+            player.stats.useitems++;
             int index = links.IndexOf((LinkLabel)sender);
             infomation.AppendText(player.UseItem(index));
             FreshBag();
@@ -368,6 +385,7 @@ namespace CaveExplorer
         private void ThrowItem(object sender, EventArgs e)
         {
             //丢弃物品
+            player.stats.dropitems++;
             int index = links.IndexOf((LinkLabel)sender);
             infomation.AppendText(player.bag[index].RemoveItem(player));
             player.bag.RemoveAt(index);
@@ -379,6 +397,25 @@ namespace CaveExplorer
         {
             //自动滚动
             infomation.ScrollToCaret();
+        }
+
+        private void GameForm_Load(object sender, EventArgs e)
+        {
+            //窗口载入
+            LoadLinkLabel();
+            LoadItems();
+            LoadCaves();
+            FreshPhoto();
+            FreshStatus();
+            FreshBag();
+            int[] caveindex = GetCaveIndex(0);
+            FreshStep(caveindex);
+        }
+
+        private void buttondata_Click(object sender, EventArgs e)
+        {
+            //查看数据
+            MessageBox.Show(player.stats.StatsString());
         }
     }
 }

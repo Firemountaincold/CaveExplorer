@@ -73,6 +73,16 @@ namespace CaveExplorer.Properties {
         /// <summary>
         ///   查找 System.Drawing.Bitmap 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Bitmap cave1 {
+            get {
+                object obj = ResourceManager.GetObject("cave1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Bitmap engineer {
             get {
                 object obj = ResourceManager.GetObject("engineer", resourceCulture);
@@ -86,6 +96,16 @@ namespace CaveExplorer.Properties {
         internal static System.Drawing.Bitmap fighter {
             get {
                 object obj = ResourceManager.GetObject("fighter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap welcome {
+            get {
+                object obj = ResourceManager.GetObject("welcome", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
