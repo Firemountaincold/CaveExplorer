@@ -13,3 +13,5 @@ D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.GameForm.resources
 D:\GitHub\CaveExplorer\CaveExplorer\bin\Debug\Newtonsoft.Json.dll
 D:\GitHub\CaveExplorer\CaveExplorer\bin\Debug\Newtonsoft.Json.xml
 D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.csproj.CopyComplete
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.About.resources
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Debug\CaveExplorer.HighScore.resources

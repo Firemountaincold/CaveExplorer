@@ -14,13 +14,14 @@ namespace CaveExplorer
     {
         //属性数组
         int[] features = new int[5] { 10, 10, 10, 10, 10 };
+        GameForm gf;
         public WelcomeForm()
         {
             InitializeComponent();
             groupBoxfeature.BackColor = Color.Transparent;
             groupBoxjob.BackColor = Color.Transparent;
         }
-        
+
         private void buttonroll_Click(object sender, EventArgs e)
         {
             //随机属性值
@@ -66,7 +67,7 @@ namespace CaveExplorer
                         }
                     }
                 }
-                GameForm gf = new GameForm(player);
+                GameForm gf = new GameForm(player, this);
                 gf.steps = step;
                 gf.Show();
                 Visible = false;
@@ -91,9 +92,47 @@ namespace CaveExplorer
                 job = Jobs.Believer;
             }
             Charactor player = new Charactor(job, features);
-            GameForm gf = new GameForm(player);
+            gf = new GameForm(player, this);
             gf.Show();
             Visible = false;
+        }
+
+        private void buttonScore_Click(object sender, EventArgs e)
+        {
+            //高分榜
+            HighScore highScore = new HighScore();
+            highScore.ShowDialog();
+        }
+
+        private void buttonAbout_Click(object sender, EventArgs e)
+        {
+            //关于
+            About about = new About();
+            about.ShowDialog();
+        }
+
+        private void rbFighter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbFighter.Checked)
+            {
+                labeldescription.Text = "斗士：基础暴击率从15%提升至25%。";
+            }
+        }
+
+        private void rbEngineer_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbEngineer.Checked)
+            {
+                labeldescription.Text = "工程师：背包从10格提升至12格。";
+            }
+        }
+
+        private void rbBeliever_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbBeliever.Checked)
+            {
+                labeldescription.Text = "信徒：每走一步回复1点血量。";
+            }
         }
     }
 }

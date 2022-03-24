@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
             this.panelplayer = new System.Windows.Forms.Panel();
             this.labelbuff = new System.Windows.Forms.Label();
             this.labelbuffname = new System.Windows.Forms.Label();
@@ -52,23 +53,42 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.labelbag = new System.Windows.Forms.Label();
-            this.charactorPhoto = new System.Windows.Forms.PictureBox();
             this.labelstatus = new System.Windows.Forms.Label();
             this.hpBar = new System.Windows.Forms.ProgressBar();
+            this.infomation = new System.Windows.Forms.RichTextBox();
             this.panelcave = new System.Windows.Forms.Panel();
+            this.panelbattle = new System.Windows.Forms.Panel();
+            this.pictureBoxAttack = new System.Windows.Forms.PictureBox();
+            this.labelbattle = new System.Windows.Forms.Label();
+            this.labelEhp = new System.Windows.Forms.Label();
+            this.labelPhp = new System.Windows.Forms.Label();
+            this.pictureBoxEnemy = new System.Windows.Forms.PictureBox();
+            this.pictureBoxPlayer = new System.Windows.Forms.PictureBox();
+            this.buttondata = new System.Windows.Forms.Button();
             this.labelstep = new System.Windows.Forms.Label();
             this.buttonNext = new System.Windows.Forms.Button();
-            this.infomation = new System.Windows.Forms.RichTextBox();
-            this.buttondata = new System.Windows.Forms.Button();
+            this.charactorPhoto = new System.Windows.Forms.PictureBox();
+            this.labele2 = new System.Windows.Forms.Label();
+            this.labele1 = new System.Windows.Forms.Label();
+            this.linkLabele2 = new System.Windows.Forms.LinkLabel();
+            this.linkLabele1 = new System.Windows.Forms.LinkLabel();
             this.panelplayer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).BeginInit();
             this.panelcave.SuspendLayout();
+            this.panelbattle.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAttack)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnemy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlayer)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).BeginInit();
             this.SuspendLayout();
             // 
             // panelplayer
             // 
             this.panelplayer.BackColor = System.Drawing.Color.LavenderBlush;
             this.panelplayer.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panelplayer.Controls.Add(this.labele2);
+            this.panelplayer.Controls.Add(this.labele1);
+            this.panelplayer.Controls.Add(this.linkLabele2);
+            this.panelplayer.Controls.Add(this.linkLabele1);
             this.panelplayer.Controls.Add(this.labelbuff);
             this.panelplayer.Controls.Add(this.labelbuffname);
             this.panelplayer.Controls.Add(this.label10);
@@ -96,7 +116,7 @@
             this.panelplayer.Controls.Add(this.labelstatus);
             this.panelplayer.Controls.Add(this.hpBar);
             this.panelplayer.Location = new System.Drawing.Point(12, 12);
-            this.panelplayer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelplayer.Margin = new System.Windows.Forms.Padding(4);
             this.panelplayer.Name = "panelplayer";
             this.panelplayer.Size = new System.Drawing.Size(308, 703);
             this.panelplayer.TabIndex = 0;
@@ -104,7 +124,7 @@
             // labelbuff
             // 
             this.labelbuff.AutoSize = true;
-            this.labelbuff.Location = new System.Drawing.Point(36, 572);
+            this.labelbuff.Location = new System.Drawing.Point(36, 608);
             this.labelbuff.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelbuff.Name = "labelbuff";
             this.labelbuff.Size = new System.Drawing.Size(22, 24);
@@ -114,7 +134,7 @@
             // labelbuffname
             // 
             this.labelbuffname.AutoSize = true;
-            this.labelbuffname.Location = new System.Drawing.Point(4, 536);
+            this.labelbuffname.Location = new System.Drawing.Point(4, 573);
             this.labelbuffname.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelbuffname.Name = "labelbuffname";
             this.labelbuffname.Size = new System.Drawing.Size(82, 24);
@@ -351,18 +371,6 @@
             this.labelbag.TabIndex = 3;
             this.labelbag.Text = "背包：";
             // 
-            // charactorPhoto
-            // 
-            this.charactorPhoto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.charactorPhoto.Image = global::CaveExplorer.Properties.Resources.fighter;
-            this.charactorPhoto.Location = new System.Drawing.Point(0, 0);
-            this.charactorPhoto.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.charactorPhoto.Name = "charactorPhoto";
-            this.charactorPhoto.Size = new System.Drawing.Size(110, 188);
-            this.charactorPhoto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.charactorPhoto.TabIndex = 1;
-            this.charactorPhoto.TabStop = false;
-            // 
             // labelstatus
             // 
             this.labelstatus.AutoSize = true;
@@ -376,24 +384,130 @@
             // hpBar
             // 
             this.hpBar.Location = new System.Drawing.Point(0, 188);
-            this.hpBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.hpBar.Margin = new System.Windows.Forms.Padding(4);
             this.hpBar.Name = "hpBar";
             this.hpBar.Size = new System.Drawing.Size(308, 40);
             this.hpBar.TabIndex = 1;
+            // 
+            // infomation
+            // 
+            this.infomation.BackColor = System.Drawing.Color.Azure;
+            this.infomation.Location = new System.Drawing.Point(328, 424);
+            this.infomation.Margin = new System.Windows.Forms.Padding(4);
+            this.infomation.Name = "infomation";
+            this.infomation.ReadOnly = true;
+            this.infomation.Size = new System.Drawing.Size(916, 291);
+            this.infomation.TabIndex = 3;
+            this.infomation.Text = "";
+            this.infomation.TextChanged += new System.EventHandler(this.infomation_TextChanged);
             // 
             // panelcave
             // 
             this.panelcave.BackgroundImage = global::CaveExplorer.Properties.Resources.cave1;
             this.panelcave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelcave.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelcave.Controls.Add(this.panelbattle);
             this.panelcave.Controls.Add(this.buttondata);
             this.panelcave.Controls.Add(this.labelstep);
             this.panelcave.Controls.Add(this.buttonNext);
             this.panelcave.Location = new System.Drawing.Point(326, 12);
-            this.panelcave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelcave.Margin = new System.Windows.Forms.Padding(4);
             this.panelcave.Name = "panelcave";
             this.panelcave.Size = new System.Drawing.Size(916, 404);
             this.panelcave.TabIndex = 2;
+            // 
+            // panelbattle
+            // 
+            this.panelbattle.BackgroundImage = global::CaveExplorer.Properties.Resources.battleground;
+            this.panelbattle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panelbattle.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelbattle.Controls.Add(this.pictureBoxAttack);
+            this.panelbattle.Controls.Add(this.labelbattle);
+            this.panelbattle.Controls.Add(this.labelEhp);
+            this.panelbattle.Controls.Add(this.labelPhp);
+            this.panelbattle.Controls.Add(this.pictureBoxEnemy);
+            this.panelbattle.Controls.Add(this.pictureBoxPlayer);
+            this.panelbattle.Location = new System.Drawing.Point(322, 15);
+            this.panelbattle.Name = "panelbattle";
+            this.panelbattle.Size = new System.Drawing.Size(550, 370);
+            this.panelbattle.TabIndex = 3;
+            this.panelbattle.Visible = false;
+            // 
+            // pictureBoxAttack
+            // 
+            this.pictureBoxAttack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxAttack.Location = new System.Drawing.Point(192, 65);
+            this.pictureBoxAttack.Name = "pictureBoxAttack";
+            this.pictureBoxAttack.Size = new System.Drawing.Size(175, 175);
+            this.pictureBoxAttack.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxAttack.TabIndex = 5;
+            this.pictureBoxAttack.TabStop = false;
+            // 
+            // labelbattle
+            // 
+            this.labelbattle.AutoSize = true;
+            this.labelbattle.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelbattle.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.labelbattle.Location = new System.Drawing.Point(98, 297);
+            this.labelbattle.Name = "labelbattle";
+            this.labelbattle.Size = new System.Drawing.Size(23, 24);
+            this.labelbattle.TabIndex = 4;
+            this.labelbattle.Text = "1";
+            // 
+            // labelEhp
+            // 
+            this.labelEhp.AutoSize = true;
+            this.labelEhp.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelEhp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.labelEhp.Location = new System.Drawing.Point(396, 27);
+            this.labelEhp.Name = "labelEhp";
+            this.labelEhp.Size = new System.Drawing.Size(57, 27);
+            this.labelEhp.TabIndex = 3;
+            this.labelEhp.Text = "?/?";
+            // 
+            // labelPhp
+            // 
+            this.labelPhp.AutoSize = true;
+            this.labelPhp.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelPhp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.labelPhp.Location = new System.Drawing.Point(75, 27);
+            this.labelPhp.Name = "labelPhp";
+            this.labelPhp.Size = new System.Drawing.Size(57, 27);
+            this.labelPhp.TabIndex = 2;
+            this.labelPhp.Text = "?/?";
+            // 
+            // pictureBoxEnemy
+            // 
+            this.pictureBoxEnemy.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxEnemy.Location = new System.Drawing.Point(391, 65);
+            this.pictureBoxEnemy.Name = "pictureBoxEnemy";
+            this.pictureBoxEnemy.Size = new System.Drawing.Size(100, 175);
+            this.pictureBoxEnemy.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxEnemy.TabIndex = 1;
+            this.pictureBoxEnemy.TabStop = false;
+            // 
+            // pictureBoxPlayer
+            // 
+            this.pictureBoxPlayer.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxPlayer.Location = new System.Drawing.Point(69, 65);
+            this.pictureBoxPlayer.Name = "pictureBoxPlayer";
+            this.pictureBoxPlayer.Size = new System.Drawing.Size(100, 175);
+            this.pictureBoxPlayer.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxPlayer.TabIndex = 0;
+            this.pictureBoxPlayer.TabStop = false;
+            // 
+            // buttondata
+            // 
+            this.buttondata.BackColor = System.Drawing.Color.Beige;
+            this.buttondata.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttondata.Location = new System.Drawing.Point(150, 330);
+            this.buttondata.Margin = new System.Windows.Forms.Padding(4);
+            this.buttondata.Name = "buttondata";
+            this.buttondata.Size = new System.Drawing.Size(140, 68);
+            this.buttondata.TabIndex = 2;
+            this.buttondata.Text = "数据统计";
+            this.buttondata.UseVisualStyleBackColor = false;
+            this.buttondata.Click += new System.EventHandler(this.buttondata_Click);
             // 
             // labelstep
             // 
@@ -411,7 +525,7 @@
             this.buttonNext.BackColor = System.Drawing.Color.Linen;
             this.buttonNext.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonNext.Location = new System.Drawing.Point(2, 330);
-            this.buttonNext.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonNext.Margin = new System.Windows.Forms.Padding(4);
             this.buttonNext.Name = "buttonNext";
             this.buttonNext.Size = new System.Drawing.Size(140, 68);
             this.buttonNext.TabIndex = 0;
@@ -419,30 +533,63 @@
             this.buttonNext.UseVisualStyleBackColor = false;
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
             // 
-            // infomation
+            // charactorPhoto
             // 
-            this.infomation.BackColor = System.Drawing.Color.Azure;
-            this.infomation.Location = new System.Drawing.Point(328, 424);
-            this.infomation.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.infomation.Name = "infomation";
-            this.infomation.ReadOnly = true;
-            this.infomation.Size = new System.Drawing.Size(916, 291);
-            this.infomation.TabIndex = 3;
-            this.infomation.Text = "";
-            this.infomation.TextChanged += new System.EventHandler(this.infomation_TextChanged);
+            this.charactorPhoto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.charactorPhoto.Image = global::CaveExplorer.Properties.Resources.fighter;
+            this.charactorPhoto.Location = new System.Drawing.Point(0, 0);
+            this.charactorPhoto.Margin = new System.Windows.Forms.Padding(4);
+            this.charactorPhoto.Name = "charactorPhoto";
+            this.charactorPhoto.Size = new System.Drawing.Size(110, 188);
+            this.charactorPhoto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.charactorPhoto.TabIndex = 1;
+            this.charactorPhoto.TabStop = false;
             // 
-            // buttondata
+            // labele2
             // 
-            this.buttondata.BackColor = System.Drawing.Color.Beige;
-            this.buttondata.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttondata.Location = new System.Drawing.Point(150, 330);
-            this.buttondata.Margin = new System.Windows.Forms.Padding(4);
-            this.buttondata.Name = "buttondata";
-            this.buttondata.Size = new System.Drawing.Size(140, 68);
-            this.buttondata.TabIndex = 2;
-            this.buttondata.Text = "数据统计";
-            this.buttondata.UseVisualStyleBackColor = false;
-            this.buttondata.Click += new System.EventHandler(this.buttondata_Click);
+            this.labele2.AutoSize = true;
+            this.labele2.Location = new System.Drawing.Point(36, 536);
+            this.labele2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labele2.Name = "labele2";
+            this.labele2.Size = new System.Drawing.Size(22, 24);
+            this.labele2.TabIndex = 31;
+            this.labele2.Text = "1";
+            this.labele2.Visible = false;
+            // 
+            // labele1
+            // 
+            this.labele1.AutoSize = true;
+            this.labele1.Location = new System.Drawing.Point(36, 512);
+            this.labele1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labele1.Name = "labele1";
+            this.labele1.Size = new System.Drawing.Size(22, 24);
+            this.labele1.TabIndex = 30;
+            this.labele1.Text = "1";
+            this.labele1.Visible = false;
+            // 
+            // linkLabele2
+            // 
+            this.linkLabele2.AutoSize = true;
+            this.linkLabele2.Location = new System.Drawing.Point(236, 536);
+            this.linkLabele2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkLabele2.Name = "linkLabele2";
+            this.linkLabele2.Size = new System.Drawing.Size(22, 24);
+            this.linkLabele2.TabIndex = 29;
+            this.linkLabele2.TabStop = true;
+            this.linkLabele2.Text = "1";
+            this.linkLabele2.Visible = false;
+            // 
+            // linkLabele1
+            // 
+            this.linkLabele1.AutoSize = true;
+            this.linkLabele1.Location = new System.Drawing.Point(236, 512);
+            this.linkLabele1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkLabele1.Name = "linkLabele1";
+            this.linkLabele1.Size = new System.Drawing.Size(22, 24);
+            this.linkLabele1.TabIndex = 28;
+            this.linkLabele1.TabStop = true;
+            this.linkLabele1.Text = "1";
+            this.linkLabele1.Visible = false;
             // 
             // GameForm
             // 
@@ -454,7 +601,8 @@
             this.Controls.Add(this.panelcave);
             this.Controls.Add(this.panelplayer);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(1270, 735);
@@ -466,9 +614,14 @@
             this.Load += new System.EventHandler(this.GameForm_Load);
             this.panelplayer.ResumeLayout(false);
             this.panelplayer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).EndInit();
             this.panelcave.ResumeLayout(false);
             this.panelcave.PerformLayout();
+            this.panelbattle.ResumeLayout(false);
+            this.panelbattle.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAttack)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnemy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlayer)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -507,5 +660,16 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label labelstep;
         private System.Windows.Forms.Button buttondata;
+        private System.Windows.Forms.Panel panelbattle;
+        private System.Windows.Forms.PictureBox pictureBoxAttack;
+        private System.Windows.Forms.Label labelbattle;
+        private System.Windows.Forms.Label labelEhp;
+        private System.Windows.Forms.Label labelPhp;
+        private System.Windows.Forms.PictureBox pictureBoxEnemy;
+        private System.Windows.Forms.PictureBox pictureBoxPlayer;
+        private System.Windows.Forms.Label labele2;
+        private System.Windows.Forms.Label labele1;
+        private System.Windows.Forms.LinkLabel linkLabele2;
+        private System.Windows.Forms.LinkLabel linkLabele1;
     }
 }

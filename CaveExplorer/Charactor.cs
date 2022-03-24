@@ -61,6 +61,10 @@ namespace CaveExplorer
             maxhp = features[0];
             hp = maxhp;
             maxbag = 10;
+            if (j == Jobs.Engineer)
+            {
+                maxbag = 12;
+            }
             atk = features[1];
             agi = features[2];
             def = features[3];
@@ -186,6 +190,7 @@ namespace CaveExplorer
         /// <returns>物品信息字符串</returns>
         public string GetItem(Items item, int situation)
         {
+            stats.items++;
             string info = "";
             Items i = new Items(item);
             for(int j = 0; j < bag.Count; j++)
@@ -364,7 +369,6 @@ namespace CaveExplorer
         /// <returns>物品使用结果信息</returns>
         public string GetItem(Charactor player)
         {
-            player.stats.items++;
             string info = player.name + "的";
             if(result.maxhpchange>0)
             {

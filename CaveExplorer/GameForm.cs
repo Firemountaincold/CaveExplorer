@@ -22,12 +22,23 @@ namespace CaveExplorer
         public List<Label> labels = new List<Label>();
         public List<LinkLabel> links = new List<LinkLabel>();
         ToolTip toolTip = new ToolTip();
-        public int[] linklabelevent = new int[10];
+        public int[] linklabelevent = new int[12];
         public int steps = 0;
-        public GameForm(Charactor p)
+        public bool isDead = false;
+        WelcomeForm parent;
+        public string scorepath = "score.cem";
+
+        public GameForm(Charactor p, WelcomeForm parent)
         {
             InitializeComponent();
+            pictureBoxPlayer.BackColor = Color.Transparent;
+            pictureBoxEnemy.BackColor = Color.Transparent;
+            pictureBoxAttack.BackColor = Color.Transparent;
+            labelbattle.BackColor = Color.Transparent;
+            labelPhp.BackColor = Color.Transparent;
+            labelEhp.BackColor = Color.Transparent;
             player = p;
+            this.parent = parent;
         }
 
         public void LoadLinkLabel()
@@ -61,6 +72,15 @@ namespace CaveExplorer
             for (int i = 0; i < linklabelevent.Length; i++) 
             {
                 linklabelevent[i] = 0;
+            }
+            if (player.job == Jobs.Engineer)
+            {
+                labels.Add(labele1);
+                labels.Add(labele2);
+                labele1.Visible = true;
+                labele2.Visible = true;
+                links.Add(linkLabele1);
+                links.Add(linkLabele2);
             }
         }
 
@@ -202,7 +222,9 @@ namespace CaveExplorer
                 FreshPhoto();
                 ClearAllEvents();
                 hpBar.Value = 0;
-                buttonNext.Enabled = false;
+                isDead = true;
+                SaveScore(false);
+                buttonNext.Text = "重新开始";
             }
         }
 
@@ -306,36 +328,107 @@ namespace CaveExplorer
             File.WriteAllText(path, save);
         }
 
+        public void SaveScore(bool win)
+        {
+            //保存最高分
+            int score = player.hp * 5 + player.atk * 15 + player.agi * 10 + player.def * 20 + player.luck * 15;
+            score += player.stats.items * 3 + player.stats.useitems * 5 - player.stats.dropitems * 4;
+            score += player.stats.events * 5 + player.stats.enemykill.Sum() * 2;
+            score += player.stats.enemy.Count * 10;
+            string info = "";
+            if (win)
+            {
+                info += "1,";
+            }
+            else
+            {
+                info += "0,";
+            }
+            info += score + "," + steps + "," + player.job.ToString() + ",";
+            info += DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "\r\n";
+            File.AppendAllText(scorepath, info);
+            SortScore();
+        }
+
+        public void SortScore()
+        {
+            //高分榜排序
+            string[] filestr = File.ReadAllLines(scorepath);
+            int[] scores = new int[filestr.Length];
+            int k = 0;
+            for(int i = 0; i < filestr.Length; i++)
+            {
+                if (filestr[i].Length > 0)
+                {
+                    scores[i] = Convert.ToInt32(filestr[i].Split(',')[1]);
+                    k++;
+                }
+                else
+                {
+                    scores[i] = 0;
+                }
+            }
+            if (k > 10)
+            {
+                k = 10;
+            }
+            string[] newfile = new string[k];
+            for (int j = 0; j < k; j++)
+            {
+                int index = 0;
+                for (int i = 0; i < scores.Length; i++)
+                {
+                    if (scores[i] > scores[index])
+                    {
+                        index = i;
+                    }
+                }
+                scores[index] = 0;
+                newfile[j] = filestr[index];
+            }
+            File.Delete(scorepath);
+            File.AppendAllLines(scorepath, newfile);
+        }
+
         private void GameForm_FormClosed(object sender, FormClosedEventArgs e)
-        {           
+        {
             //关闭窗口时整个退出
-            Application.Exit();
+            if (!parent.Visible)
+            {
+                Application.Exit();
+            }
         }
 
         private void GameForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             //退出询问
-            if (MessageBox.Show("是否退出游戏？", "退出游戏", MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (!isDead)
             {
-                if (player.hp > 0)
+                if (MessageBox.Show("是否退出游戏？", "退出游戏", MessageBoxButtons.OKCancel) == DialogResult.OK)
                 {
                     if (MessageBox.Show("是否保存角色存档？", "保存游戏", MessageBoxButtons.OKCancel) == DialogResult.OK)
                     {
                         SaveGame();
                     }
                 }
-            }
-            else
-            {
-                e.Cancel = true;
+                else
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
-        private void buttonNext_Click(object sender, EventArgs e)
+        private async void buttonNext_Click(object sender, EventArgs e)
         {
             //下一回合
+            if (isDead)
+            {
+                parent.Visible = true;
+                Close();
+                return;
+            }
             steps++;
-            Text = "洞穴探险进行中！第" + steps.ToString() + "步";
+            infomation.AppendText("       ~洞穴探险进行中！第" + steps.ToString() + "步~\r\n");
             infomation.AppendText(player.Next());
             Random rr = new Random();
             int index = rr.Next(0, 100);
@@ -355,9 +448,25 @@ namespace CaveExplorer
             {
                 newcave = new Caves(findcaves[rr.Next(0, caveindex[1])]);
             }
+            if (steps == 499)
+            {
+                newcave = new Caves(CaveType.Event, "决战时刻,你发现了洞穴的尽头，" +
+                    "那里栖息着强大的魔王，你休息了一会，做好了最后一战的准备。,999,15,0,0,0,0,0,0,0,None");
+                player.stats.events++;
+            }
+            else if (steps == 500)
+            {
+                int bosshp = 2000 + rr.Next(1000);
+                int bossatk = player.def / 2 + rr.Next(20);
+                int bossdef = player.atk * 2 - rr.Next(30);
+                newcave = new Caves(CaveType.Fight, "多元虚空魔王," + bosshp + "," + bossatk + ",1000," + bossdef + ",0,0");
+            }
             if (newcave.type == CaveType.Fight)
             {
-                infomation.AppendText(newcave.fights.FightWith(player, itemlist));
+                buttonNext.Enabled = false;
+                Battle b = new Battle(player, newcave, panelbattle, labelPhp, labelEhp, labelbattle, pictureBoxPlayer, pictureBoxEnemy, pictureBoxAttack);
+                infomation.AppendText(await newcave.fights.FightWith(player, itemlist, b));
+                buttonNext.Enabled = true;
             }
             else if(newcave.type == CaveType.Find)
             {
@@ -367,9 +476,35 @@ namespace CaveExplorer
             {
                 infomation.AppendText(newcave.events.EventRun(player));
             }
+            if (player.job == Jobs.Believer)
+            {
+                if (player.hp < player.maxhp)
+                {
+                    player.hp++;
+                    infomation.AppendText("[信徒]你回复了1点血量。\r\n");
+                }
+                else
+                {
+                    infomation.AppendText("[信徒]你的血量已满，无法恢复。\r\n");
+                }
+            }
             FreshBag();
             FreshStatus();
             FreshStep(caveindex);
+            if (steps == 500)
+            {
+                infomation.AppendText("你打败了魔王！你已成功通关！");
+                if(MessageBox.Show("是否直接退出？","您已通关！",MessageBoxButtons.OKCancel) == DialogResult.OK)
+                {
+                    isDead = true;
+                    Close();
+                }
+                else
+                {
+                    parent.Visible = true;
+                    Close();
+                }
+            }
         }
 
         private void UseItem(object sender, EventArgs e)

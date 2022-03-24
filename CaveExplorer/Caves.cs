@@ -56,7 +56,7 @@ namespace CaveExplorer
     public class Fights
     {
         public string demonname;
-        int hp;
+        public int hp;
         int atk;
         int agi;
         int def;
@@ -86,8 +86,10 @@ namespace CaveExplorer
             step = Convert.ToInt32(temp[6]);
         }
 
-        public string FightWith(Charactor player, List<Items> items)
+        public async Task<string> FightWith(Charactor player, List<Items> items, Battle battle)
         {
+            await battle.BattleStart();
+            bool win = true;
             string info = "[战斗信息]";
             Random r = new Random();
             int atkchange = 0;
@@ -120,18 +122,34 @@ namespace CaveExplorer
                 info += demonname;
             }
             info += "先开始攻击。\r\n";
+            int critratio = 84;
+            if (player.job == Jobs.Fighter)
+            {
+                critratio = 74;
+            }
             while (player.hp > 0 || hp > 0)
             {
                 if (player.agi + agichange >= agi)
                 {
-                    int damage = (player.atk + atkchange) * 2 - def + r.Next(0, 5) - 2;
-                    if (damage < 0) 
+                    int damage = (player.atk + atkchange) * 2 - def + r.Next(0, 9) - 4;
+                    if (damage < 1) 
                     {
-                        damage = 0;
+                        damage = 1;
                     }
-                    damage /= 2;
-                    hp -= damage;
-                    info += player.name + "对" + demonname + "造成了" + damage.ToString() + "点伤害";
+                    if (r.Next(0, 100) > critratio)
+                    {
+                        damage += def;
+                        hp -= damage;
+                        info += player.name + "对" + demonname + "造成了暴击！" + damage.ToString() + "点伤害";
+                        await battle.PlayerAttack(player.name + "对" + demonname + "造成了暴击！" + damage.ToString() + "点伤害！", hp);
+                    }
+                    else
+                    {
+                        damage = (damage + 1) / 2;
+                        hp -= damage;
+                        info += player.name + "对" + demonname + "造成了" + damage.ToString() + "点伤害";
+                        await battle.PlayerAttack(player.name + "对" + demonname + "造成了" + damage.ToString() + "点伤害。", hp);
+                    }
                     if (hp <= 0)
                     {
                         info += "，" + demonname + "死了。\r\n";
@@ -141,44 +159,80 @@ namespace CaveExplorer
                         }
                         break;
                     }
-                    int reverse = atk * 2 - (player.def + defchange) + r.Next(0, 5) - 2;
-                    if (reverse < 0)
+                    int reverse = atk * 2 - (player.def + defchange) + r.Next(0, 9) - 4;
+                    if (reverse < 1)
                     {
-                        reverse = 0;
+                        reverse = 1;
                     }
-                    reverse /= 2;
-                    player.hp -= reverse;
-                    info += "，" + demonname + "的反击造成了" + reverse.ToString() + "点伤害";
+                    if (r.Next(0, 100) > 90)
+                    {
+                        reverse = atk + r.Next(0, 9) - 4;
+                        player.hp -= reverse;
+                        info += "，" + demonname + "的反击造成了暴击！" + reverse.ToString() + "点伤害";
+                        await battle.EnemyAttack(demonname + "的反击造成了暴击！" + reverse.ToString() + "点伤害！");
+                    }
+                    else
+                    {
+                        reverse = (reverse + 1) / 2;
+                        player.hp -= reverse;
+                        await battle.EnemyAttack(demonname + "的反击造成了" + reverse.ToString() + "点伤害。");
+                        info += "，" + demonname + "的反击造成了" + reverse.ToString() + "点伤害";
+                    }
                     if(player.hp <= 0)
                     {
                         info += "，" + player.name + "死了。\r\n";
+                        win = false;
                         break;
                     }
                     info += "。\r\n";
                 }
                 else
                 {
-                    int damage = atk * 2 - (player.def + defchange) + r.Next(0, 5) - 2;
-                    if (damage < 0)
+                    int damage = atk * 2 - (player.def + defchange) + r.Next(0, 9) - 4;
+                    if (damage < 1)
                     {
-                        damage = 0;
+                        damage = 1;
                     }
-                    damage /= 2;
-                    player.hp -= damage;
-                    info += demonname + "对" + player.name + "造成了" + damage.ToString() + "点伤害";
+                    if (r.Next(0, 100) > 90)
+                    {
+                        damage = atk + r.Next(0, 9) - 4;
+                        player.hp -= damage;
+                        info += demonname + "对" + player.name + "造成了暴击！" + damage.ToString() + "点伤害";
+                        await battle.EnemyAttack(demonname + "对" + player.name + "造成了暴击！" + damage.ToString() + "点伤害！");
+                    }
+                    else
+                    {
+                        damage = (damage + 1) / 2;
+                        player.hp -= damage;
+                        info += demonname + "对" + player.name + "造成了" + damage.ToString() + "点伤害";
+                        await battle.EnemyAttack(demonname + "对" + player.name + "造成了" + damage.ToString() + "点伤害。");
+                    }
                     if (player.hp <= 0)
                     {
                         info += "，" + player.name + "死了。\r\n";
+                        win = false;
                         break;
                     }
-                    int reverse = (player.atk + atkchange) * 2 - def + r.Next(0, 5) - 2;
-                    if (reverse < 0) 
+                    int reverse = (player.atk + atkchange) * 2 - def + r.Next(0, 9) - 4;
+                    if (reverse < 1) 
                     {
-                        reverse = 0;
+                        reverse = 1;
                     }
-                    reverse /= 2;
-                    hp -= reverse;
-                    info += "，" + player.name + "的反击造成了" + reverse.ToString() + "点伤害";
+                    
+                    if (r.Next(0, 100) > critratio)
+                    {
+                        reverse += def;
+                        hp -= reverse;
+                        info += "，" + player.name + "的反击造成了暴击！" + reverse.ToString() + "点伤害";
+                        await battle.PlayerAttack(player.name + "的反击造成了暴击！" + reverse.ToString() + "点伤害！", hp);
+                    }
+                    else
+                    {
+                        reverse = (reverse + 1) / 2;
+                        hp -= reverse;
+                        info += "，" + player.name + "的反击造成了" + reverse.ToString() + "点伤害";
+                        await battle.PlayerAttack(player.name + "的反击造成了" + reverse.ToString() + "点伤害。", hp);
+                    }
                     if (hp <= 0)
                     {
                         info += "，" + demonname + "死了。\r\n";
@@ -191,6 +245,7 @@ namespace CaveExplorer
                     info += "。\r\n";
                 }
             }
+            await battle.BattleEnd(win);
             return info;
         }
     }
