@@ -54,6 +54,18 @@ namespace CaveExplorer
                     {
                         row[3] = "信徒";
                     }
+                    else if (vs[3] == "Fighter2")
+                    {
+                        row[3] = "血斗士";
+                    }
+                    else if (vs[3] == "Engineer2")
+                    {
+                        row[3] = "机械师";
+                    }
+                    else if (vs[3] == "Believer2")
+                    {
+                        row[3] = "圣徒";
+                    }
                     row[4] = vs[4];
                     if (vs[0] == "0")
                     {

@@ -13,7 +13,10 @@ namespace CaveExplorer
     {
         Fighter=0,
         Engineer,
-        Believer
+        Believer,
+        Fighter2,
+        Engineer2,
+        Believer2
     }
     /// <summary>
     /// 角色心情：开心、生气、伤心、天神下凡
@@ -33,7 +36,7 @@ namespace CaveExplorer
     {
         //职业
         public string name = "你";
-        public Jobs job { get; }
+        public Jobs job;
         //背包
         public int maxbag;
         public List<Items> bag=new List<Items>();
@@ -94,6 +97,18 @@ namespace CaveExplorer
             else if(temp[7] == "Believer")
             {
                 job = Jobs.Believer;
+            }
+            else if (temp[7] == "Fighter2")
+            {
+                job = Jobs.Fighter2;
+            }
+            else if (temp[7] == "Engineer2")
+            {
+                job = Jobs.Engineer2;
+            }
+            else if (temp[7] == "Believer2")
+            {
+                job = Jobs.Believer2;
             }
             if (temp[8] == "Happy")
             {
@@ -188,8 +203,18 @@ namespace CaveExplorer
         /// <param name="item">物品</param>
         /// <param name="situation">场景，0为掉落，1为发现</param>
         /// <returns>物品信息字符串</returns>
-        public string GetItem(Items item, int situation)
+        public async Task<string> GetItem(Items item,ItemEventPanel iep, int situation)
         {
+            string linfo = "";
+            if (situation == 0)
+            {
+                linfo += "从怪物的尸体上发现了 ";
+            }
+            else if (situation == 1)
+            {
+                linfo += "探索时发现了 ";
+            }
+            await iep.ShowP(linfo + item.name + "!");
             stats.items++;
             string info = "";
             Items i = new Items(item);
@@ -432,18 +457,28 @@ namespace CaveExplorer
         /// <returns>物品信息</returns>
         public string RemoveItem(Charactor player)
         {
-            player.hp -= result.maxbagchange;
             player.atk -= result.atkchange;
             player.agi -= result.agichange;
             player.def -= result.defchange;
             player.luck -= result.luckchange;
-            player.maxhp -= result.maxhpchange;
             if (player.hp > player.maxhp)
             {
                 player.hp = player.maxhp;
             }
             player.maxbag -= result.maxbagchange;
-            return "[物品信息]" + name + "的效果消失了。\r\n";
+            string e2 = "";
+            if (player.job == Jobs.Engineer2)
+            {
+                int delta = player.maxhp - player.hp;
+                int rec = 20;
+                if (rec >= delta)
+                {
+                    rec = delta;
+                }
+                player.hp += rec;
+                e2 = "恢复了" + rec + "点血量。";
+            }
+            return "[物品信息]" + name + "的效果消失了。" + e2 + "\r\n";
         }
         /// <summary>
         /// 说明用字符串

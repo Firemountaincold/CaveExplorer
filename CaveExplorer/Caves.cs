@@ -86,7 +86,7 @@ namespace CaveExplorer
             step = Convert.ToInt32(temp[6]);
         }
 
-        public async Task<string> FightWith(Charactor player, List<Items> items, Battle battle)
+        public async Task<string> FightWith(Charactor player, List<Items> items, Battle battle, ItemEventPanel iep)
         {
             await battle.BattleStart();
             bool win = true;
@@ -123,7 +123,7 @@ namespace CaveExplorer
             }
             info += "先开始攻击。\r\n";
             int critratio = 84;
-            if (player.job == Jobs.Fighter)
+            if (player.job == Jobs.Fighter || player.job == Jobs.Fighter2) 
             {
                 critratio = 74;
             }
@@ -141,21 +141,48 @@ namespace CaveExplorer
                         damage += def;
                         hp -= damage;
                         info += player.name + "对" + demonname + "造成了暴击！" + damage.ToString() + "点伤害";
-                        await battle.PlayerAttack(player.name + "对" + demonname + "造成了暴击！" + damage.ToString() + "点伤害！", hp);
+                        string f2 = "";
+                        if (player.job == Jobs.Fighter2)
+                        {
+                            int delta = player.maxhp - player.hp;
+                            int rec = damage / 10 + 1;
+                            if (rec >= delta)
+                            {
+                                rec = delta;
+                            }
+                            player.hp += rec;
+                            f2 = "，吸血恢复了" + rec + "点血量";
+                            info += f2;
+                        }
+                        await battle.PlayerAttack(player.name + "对" + demonname + "造成了暴击！" + damage.ToString() + "点伤害" + f2 + "！", hp);
                     }
                     else
                     {
                         damage = (damage + 1) / 2;
                         hp -= damage;
                         info += player.name + "对" + demonname + "造成了" + damage.ToString() + "点伤害";
-                        await battle.PlayerAttack(player.name + "对" + demonname + "造成了" + damage.ToString() + "点伤害。", hp);
+                        string f2 = "";
+                        if (player.job == Jobs.Fighter2)
+                        {
+                            int delta = player.maxhp - player.hp;
+                            int rec = damage / 10 + 1;
+                            if (rec >= delta)
+                            {
+                                rec = delta;
+                            }
+                            player.hp += rec;
+                            f2 = "，吸血恢复了" + rec + "点血量";
+                            info += f2;
+                        }
+                        await battle.PlayerAttack(player.name + "对" + demonname + "造成了" + damage.ToString() + "点伤害" + f2 + "。", hp);
                     }
                     if (hp <= 0)
                     {
+                        await battle.BattleEnd(win);
                         info += "，" + demonname + "死了。\r\n";
                         if (r.Next(0, 50) < player.luck + 10)
                         {
-                            info += player.GetItem(items[itemid], 0);
+                            info += await player.GetItem(items[itemid], iep, 0);
                         }
                         break;
                     }
@@ -180,6 +207,7 @@ namespace CaveExplorer
                     }
                     if(player.hp <= 0)
                     {
+                        await battle.BattleEnd(win);
                         info += "，" + player.name + "死了。\r\n";
                         win = false;
                         break;
@@ -209,6 +237,7 @@ namespace CaveExplorer
                     }
                     if (player.hp <= 0)
                     {
+                        await battle.BattleEnd(win);
                         info += "，" + player.name + "死了。\r\n";
                         win = false;
                         break;
@@ -224,28 +253,54 @@ namespace CaveExplorer
                         reverse += def;
                         hp -= reverse;
                         info += "，" + player.name + "的反击造成了暴击！" + reverse.ToString() + "点伤害";
-                        await battle.PlayerAttack(player.name + "的反击造成了暴击！" + reverse.ToString() + "点伤害！", hp);
+                        string f2 = "";
+                        if (player.job == Jobs.Fighter2)
+                        {
+                            int delta = player.maxhp - player.hp;
+                            int rec = reverse / 10 + 1;
+                            if (rec >= delta)
+                            {
+                                rec = delta;
+                            }
+                            player.hp += rec;
+                            f2 = "，吸血恢复了" + rec + "点血量";
+                            info += f2;
+                        }
+                        await battle.PlayerAttack(player.name + "的反击造成了暴击！" + reverse.ToString() + "点伤害" + f2 + "！", hp);
                     }
                     else
                     {
                         reverse = (reverse + 1) / 2;
                         hp -= reverse;
                         info += "，" + player.name + "的反击造成了" + reverse.ToString() + "点伤害";
-                        await battle.PlayerAttack(player.name + "的反击造成了" + reverse.ToString() + "点伤害。", hp);
+                        string f2 = "";
+                        if (player.job == Jobs.Fighter2)
+                        {
+                            int delta = player.maxhp - player.hp;
+                            int rec = reverse / 10 + 1;
+                            if (rec >= delta)
+                            {
+                                rec = delta;
+                            }
+                            player.hp += rec;
+                            f2 = "，吸血恢复了" + rec + "点血量";
+                            info += f2;
+                        }
+                        await battle.PlayerAttack(player.name + "的反击造成了" + reverse.ToString() + "点伤害" + f2 + "。", hp);
                     }
                     if (hp <= 0)
                     {
+                        await battle.BattleEnd(win);
                         info += "，" + demonname + "死了。\r\n";
                         if (r.Next(0, 100) < player.luck + 10)
                         {
-                            info += player.GetItem(items[itemid], 0);
+                            info += await player.GetItem(items[itemid], iep, 0);
                         }
                         break;
                     }
                     info += "。\r\n";
                 }
             }
-            await battle.BattleEnd(win);
             return info;
         }
     }
@@ -264,9 +319,9 @@ namespace CaveExplorer
             step = Convert.ToInt32(temp[1]);
         }
 
-        public string FindItem(Charactor player, List<Items> itemlist)
+        public async Task<string> FindItem(Charactor player, List<Items> itemlist, ItemEventPanel iep)
         {
-            string info = player.GetItem(itemlist[itemID], 1);
+            string info = await player.GetItem(itemlist[itemID], iep, 1);
             return info;
         }
 
@@ -325,8 +380,9 @@ namespace CaveExplorer
             }
         }
 
-        public string EventRun(Charactor player)
+        public async Task<string> EventRun(Charactor player, ItemEventPanel iep)
         {
+            await iep.ShowP(description);
             int i = 0;
             string info = player.name + "的";
             if (result.maxhpchange > 0)
@@ -334,6 +390,21 @@ namespace CaveExplorer
                 i++;
                 player.maxhp += result.maxhpchange;
                 info += "生命上限增加了" + result.maxhpchange.ToString() + "点，";
+            }
+            else if (result.maxhpchange < 0) 
+            {
+                i++;
+                int ttt = player.maxhp;
+                player.maxhp += result.maxhpchange;
+                if(player.maxhp < 0)
+                {
+                    player.maxhp = 1;
+                }
+                if (player.hp > player.maxhp)
+                {
+                    player.hp = player.maxhp;
+                }
+                info += "生命上限减少了" + (ttt - player.maxhp).ToString() + "点，";
             }
             if (result.hpchange != 0)
             {
@@ -459,12 +530,10 @@ namespace CaveExplorer
         /// <param name="player">角色</param>
         public string RemoveResults(Charactor player)
         {
-            player.hp -= result.maxbagchange;
             player.atk -= result.atkchange;
             player.agi -= result.agichange;
             player.def -= result.defchange;
             player.luck -= result.luckchange;
-            player.maxhp -= result.maxhpchange;
             if (player.hp > player.maxhp)
             {
                 player.hp = player.maxhp;

@@ -14,13 +14,13 @@ namespace CaveExplorer
         Panel panel;
         Label Php;
         Label Ehp;
-        Label battle;
+        TextBox battle;
         PictureBox Pplayer;
         PictureBox Penemy;
         PictureBox Pattack;
         int maxhp;
 
-        public Battle(Charactor player, Caves enemy, Panel panel, Label Php, Label Ehp, Label battle, PictureBox Pplayer, PictureBox Penemy, PictureBox Pattack)
+        public Battle(Charactor player, Caves enemy, Panel panel, Label Php, Label Ehp, TextBox battle, PictureBox Pplayer, PictureBox Penemy, PictureBox Pattack)
         {
             this.player = player;
             this.enemy = enemy;
@@ -59,6 +59,7 @@ namespace CaveExplorer
             await Task.Delay(100);
             Pattack.Image = null;
             this.Ehp.Text = Ehp + "/" + maxhp;
+            FreshHP();
             if (Ehp < maxhp / 3)
             {
                 this.Ehp.ForeColor = Color.Red;
@@ -101,6 +102,12 @@ namespace CaveExplorer
             await Task.Delay(200);
         }
 
+        public void FreshHP()
+        {
+            //刷新血量
+            Php.Text = player.hp + "/" + player.maxhp;
+        }
+
         public async Task BattleStart()
         {
             //战斗开始
@@ -125,7 +132,47 @@ namespace CaveExplorer
             }
             await Task.Delay(800);
             panel.Visible = false;
+            Penemy.Image = null;
+            Pplayer.Image = null;
             Pattack.Image = null;
+            Php.Text = "";
+            Ehp.Text = "";
+        }
+    }
+
+    public class ItemEventPanel
+    {
+        bool isItem;
+        Panel panel;
+        PictureBox pictureBox;
+        TextBox label;
+
+        public ItemEventPanel(bool isItem, Panel panel, PictureBox pictureBox, TextBox label)
+        {
+            this.isItem = isItem;
+            this.panel = panel;
+            this.pictureBox = pictureBox;
+            this.label = label;
+        }
+
+        public async Task ShowP(string info)
+        {
+            label.Text = info;
+            panel.Visible = true;
+            if (isItem)
+            {
+                pictureBox.Image = Properties.Resources.find1;
+                await Task.Delay(500);
+                pictureBox.Image = Properties.Resources.find2;
+                await Task.Delay(1000);
+            }
+            else
+            {
+                pictureBox.Image = Properties.Resources._event;
+                await Task.Delay(1500);
+            }
+            panel.Visible = false;
+            pictureBox.Image = null;
         }
     }
 }

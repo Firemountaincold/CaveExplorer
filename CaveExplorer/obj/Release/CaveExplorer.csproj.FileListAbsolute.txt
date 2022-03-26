@@ -1,0 +1,14 @@
+D:\GitHub\CaveExplorer\CaveExplorer\bin\Release\CaveExplorer.exe.config
+D:\GitHub\CaveExplorer\CaveExplorer\bin\Release\CaveExplorer.exe
+D:\GitHub\CaveExplorer\CaveExplorer\bin\Release\CaveExplorer.pdb
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.csproj.AssemblyReference.cache
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.csproj.SuggestedBindingRedirects.cache
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.About.resources
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.GameForm.resources
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.HighScore.resources
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.Properties.Resources.resources
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.WelcomeForm.resources
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.csproj.GenerateResource.cache
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.csproj.CoreCompileInputs.cache
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.exe
+D:\GitHub\CaveExplorer\CaveExplorer\obj\Release\CaveExplorer.pdb

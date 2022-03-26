@@ -30,6 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
             this.panelplayer = new System.Windows.Forms.Panel();
+            this.labele2 = new System.Windows.Forms.Label();
+            this.labele1 = new System.Windows.Forms.Label();
+            this.linkLabele2 = new System.Windows.Forms.LinkLabel();
+            this.linkLabele1 = new System.Windows.Forms.LinkLabel();
             this.labelbuff = new System.Windows.Forms.Label();
             this.labelbuffname = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -53,13 +57,14 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.labelbag = new System.Windows.Forms.Label();
+            this.charactorPhoto = new System.Windows.Forms.PictureBox();
             this.labelstatus = new System.Windows.Forms.Label();
             this.hpBar = new System.Windows.Forms.ProgressBar();
             this.infomation = new System.Windows.Forms.RichTextBox();
             this.panelcave = new System.Windows.Forms.Panel();
             this.panelbattle = new System.Windows.Forms.Panel();
+            this.labelbattle = new System.Windows.Forms.TextBox();
             this.pictureBoxAttack = new System.Windows.Forms.PictureBox();
-            this.labelbattle = new System.Windows.Forms.Label();
             this.labelEhp = new System.Windows.Forms.Label();
             this.labelPhp = new System.Windows.Forms.Label();
             this.pictureBoxEnemy = new System.Windows.Forms.PictureBox();
@@ -67,18 +72,19 @@
             this.buttondata = new System.Windows.Forms.Button();
             this.labelstep = new System.Windows.Forms.Label();
             this.buttonNext = new System.Windows.Forms.Button();
-            this.charactorPhoto = new System.Windows.Forms.PictureBox();
-            this.labele2 = new System.Windows.Forms.Label();
-            this.labele1 = new System.Windows.Forms.Label();
-            this.linkLabele2 = new System.Windows.Forms.LinkLabel();
-            this.linkLabele1 = new System.Windows.Forms.LinkLabel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.textBoxpage = new System.Windows.Forms.TextBox();
+            this.buttonextpage = new System.Windows.Forms.Button();
+            this.buttonllastpage = new System.Windows.Forms.Button();
+            this.checkBoxauto = new System.Windows.Forms.CheckBox();
             this.panelplayer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).BeginInit();
             this.panelcave.SuspendLayout();
             this.panelbattle.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAttack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnemy)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlayer)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelplayer
@@ -120,6 +126,52 @@
             this.panelplayer.Name = "panelplayer";
             this.panelplayer.Size = new System.Drawing.Size(308, 703);
             this.panelplayer.TabIndex = 0;
+            // 
+            // labele2
+            // 
+            this.labele2.AutoSize = true;
+            this.labele2.Location = new System.Drawing.Point(36, 536);
+            this.labele2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labele2.Name = "labele2";
+            this.labele2.Size = new System.Drawing.Size(22, 24);
+            this.labele2.TabIndex = 31;
+            this.labele2.Text = "1";
+            this.labele2.Visible = false;
+            // 
+            // labele1
+            // 
+            this.labele1.AutoSize = true;
+            this.labele1.Location = new System.Drawing.Point(36, 512);
+            this.labele1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labele1.Name = "labele1";
+            this.labele1.Size = new System.Drawing.Size(22, 24);
+            this.labele1.TabIndex = 30;
+            this.labele1.Text = "1";
+            this.labele1.Visible = false;
+            // 
+            // linkLabele2
+            // 
+            this.linkLabele2.AutoSize = true;
+            this.linkLabele2.Location = new System.Drawing.Point(236, 536);
+            this.linkLabele2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkLabele2.Name = "linkLabele2";
+            this.linkLabele2.Size = new System.Drawing.Size(22, 24);
+            this.linkLabele2.TabIndex = 29;
+            this.linkLabele2.TabStop = true;
+            this.linkLabele2.Text = "1";
+            this.linkLabele2.Visible = false;
+            // 
+            // linkLabele1
+            // 
+            this.linkLabele1.AutoSize = true;
+            this.linkLabele1.Location = new System.Drawing.Point(236, 512);
+            this.linkLabele1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkLabele1.Name = "linkLabele1";
+            this.linkLabele1.Size = new System.Drawing.Size(22, 24);
+            this.linkLabele1.TabIndex = 28;
+            this.linkLabele1.TabStop = true;
+            this.linkLabele1.Text = "1";
+            this.linkLabele1.Visible = false;
             // 
             // labelbuff
             // 
@@ -371,6 +423,18 @@
             this.labelbag.TabIndex = 3;
             this.labelbag.Text = "背包：";
             // 
+            // charactorPhoto
+            // 
+            this.charactorPhoto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.charactorPhoto.Image = global::CaveExplorer.Properties.Resources.fighter;
+            this.charactorPhoto.Location = new System.Drawing.Point(0, 0);
+            this.charactorPhoto.Margin = new System.Windows.Forms.Padding(4);
+            this.charactorPhoto.Name = "charactorPhoto";
+            this.charactorPhoto.Size = new System.Drawing.Size(110, 188);
+            this.charactorPhoto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.charactorPhoto.TabIndex = 1;
+            this.charactorPhoto.TabStop = false;
+            // 
             // labelstatus
             // 
             this.labelstatus.AutoSize = true;
@@ -406,6 +470,7 @@
             this.panelcave.BackgroundImage = global::CaveExplorer.Properties.Resources.cave1;
             this.panelcave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelcave.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelcave.Controls.Add(this.checkBoxauto);
             this.panelcave.Controls.Add(this.panelbattle);
             this.panelcave.Controls.Add(this.buttondata);
             this.panelcave.Controls.Add(this.labelstep);
@@ -421,8 +486,8 @@
             this.panelbattle.BackgroundImage = global::CaveExplorer.Properties.Resources.battleground;
             this.panelbattle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelbattle.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panelbattle.Controls.Add(this.pictureBoxAttack);
             this.panelbattle.Controls.Add(this.labelbattle);
+            this.panelbattle.Controls.Add(this.pictureBoxAttack);
             this.panelbattle.Controls.Add(this.labelEhp);
             this.panelbattle.Controls.Add(this.labelPhp);
             this.panelbattle.Controls.Add(this.pictureBoxEnemy);
@@ -432,6 +497,18 @@
             this.panelbattle.Size = new System.Drawing.Size(550, 370);
             this.panelbattle.TabIndex = 3;
             this.panelbattle.Visible = false;
+            // 
+            // labelbattle
+            // 
+            this.labelbattle.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.labelbattle.Font = new System.Drawing.Font("宋体", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labelbattle.Location = new System.Drawing.Point(32, 269);
+            this.labelbattle.Multiline = true;
+            this.labelbattle.Name = "labelbattle";
+            this.labelbattle.ReadOnly = true;
+            this.labelbattle.Size = new System.Drawing.Size(486, 75);
+            this.labelbattle.TabIndex = 6;
+            this.labelbattle.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // pictureBoxAttack
             // 
@@ -443,17 +520,6 @@
             this.pictureBoxAttack.TabIndex = 5;
             this.pictureBoxAttack.TabStop = false;
             // 
-            // labelbattle
-            // 
-            this.labelbattle.AutoSize = true;
-            this.labelbattle.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelbattle.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.labelbattle.Location = new System.Drawing.Point(98, 297);
-            this.labelbattle.Name = "labelbattle";
-            this.labelbattle.Size = new System.Drawing.Size(23, 24);
-            this.labelbattle.TabIndex = 4;
-            this.labelbattle.Text = "1";
-            // 
             // labelEhp
             // 
             this.labelEhp.AutoSize = true;
@@ -461,9 +527,8 @@
             this.labelEhp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.labelEhp.Location = new System.Drawing.Point(396, 27);
             this.labelEhp.Name = "labelEhp";
-            this.labelEhp.Size = new System.Drawing.Size(57, 27);
+            this.labelEhp.Size = new System.Drawing.Size(0, 27);
             this.labelEhp.TabIndex = 3;
-            this.labelEhp.Text = "?/?";
             // 
             // labelPhp
             // 
@@ -472,9 +537,8 @@
             this.labelPhp.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.labelPhp.Location = new System.Drawing.Point(75, 27);
             this.labelPhp.Name = "labelPhp";
-            this.labelPhp.Size = new System.Drawing.Size(57, 27);
+            this.labelPhp.Size = new System.Drawing.Size(0, 27);
             this.labelPhp.TabIndex = 2;
-            this.labelPhp.Text = "?/?";
             // 
             // pictureBoxEnemy
             // 
@@ -533,63 +597,59 @@
             this.buttonNext.UseVisualStyleBackColor = false;
             this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
             // 
-            // charactorPhoto
+            // panel1
             // 
-            this.charactorPhoto.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.charactorPhoto.Image = global::CaveExplorer.Properties.Resources.fighter;
-            this.charactorPhoto.Location = new System.Drawing.Point(0, 0);
-            this.charactorPhoto.Margin = new System.Windows.Forms.Padding(4);
-            this.charactorPhoto.Name = "charactorPhoto";
-            this.charactorPhoto.Size = new System.Drawing.Size(110, 188);
-            this.charactorPhoto.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.charactorPhoto.TabIndex = 1;
-            this.charactorPhoto.TabStop = false;
+            this.panel1.Controls.Add(this.textBoxpage);
+            this.panel1.Controls.Add(this.buttonextpage);
+            this.panel1.Controls.Add(this.buttonllastpage);
+            this.panel1.Location = new System.Drawing.Point(998, 668);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(244, 47);
+            this.panel1.TabIndex = 4;
             // 
-            // labele2
+            // textBoxpage
             // 
-            this.labele2.AutoSize = true;
-            this.labele2.Location = new System.Drawing.Point(36, 536);
-            this.labele2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labele2.Name = "labele2";
-            this.labele2.Size = new System.Drawing.Size(22, 24);
-            this.labele2.TabIndex = 31;
-            this.labele2.Text = "1";
-            this.labele2.Visible = false;
+            this.textBoxpage.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxpage.Location = new System.Drawing.Point(50, 0);
+            this.textBoxpage.Multiline = true;
+            this.textBoxpage.Name = "textBoxpage";
+            this.textBoxpage.ReadOnly = true;
+            this.textBoxpage.Size = new System.Drawing.Size(144, 46);
+            this.textBoxpage.TabIndex = 2;
+            this.textBoxpage.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // labele1
+            // buttonextpage
             // 
-            this.labele1.AutoSize = true;
-            this.labele1.Location = new System.Drawing.Point(36, 512);
-            this.labele1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labele1.Name = "labele1";
-            this.labele1.Size = new System.Drawing.Size(22, 24);
-            this.labele1.TabIndex = 30;
-            this.labele1.Text = "1";
-            this.labele1.Visible = false;
+            this.buttonextpage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonextpage.Location = new System.Drawing.Point(194, 0);
+            this.buttonextpage.Name = "buttonextpage";
+            this.buttonextpage.Size = new System.Drawing.Size(50, 47);
+            this.buttonextpage.TabIndex = 1;
+            this.buttonextpage.Text = ">";
+            this.buttonextpage.UseVisualStyleBackColor = true;
+            this.buttonextpage.Click += new System.EventHandler(this.buttonextpage_Click);
             // 
-            // linkLabele2
+            // buttonllastpage
             // 
-            this.linkLabele2.AutoSize = true;
-            this.linkLabele2.Location = new System.Drawing.Point(236, 536);
-            this.linkLabele2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.linkLabele2.Name = "linkLabele2";
-            this.linkLabele2.Size = new System.Drawing.Size(22, 24);
-            this.linkLabele2.TabIndex = 29;
-            this.linkLabele2.TabStop = true;
-            this.linkLabele2.Text = "1";
-            this.linkLabele2.Visible = false;
+            this.buttonllastpage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonllastpage.Location = new System.Drawing.Point(0, 0);
+            this.buttonllastpage.Name = "buttonllastpage";
+            this.buttonllastpage.Size = new System.Drawing.Size(50, 47);
+            this.buttonllastpage.TabIndex = 0;
+            this.buttonllastpage.Text = "<";
+            this.buttonllastpage.UseVisualStyleBackColor = true;
+            this.buttonllastpage.Click += new System.EventHandler(this.buttonllastpage_Click);
             // 
-            // linkLabele1
+            // checkBoxauto
             // 
-            this.linkLabele1.AutoSize = true;
-            this.linkLabele1.Location = new System.Drawing.Point(236, 512);
-            this.linkLabele1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.linkLabele1.Name = "linkLabele1";
-            this.linkLabele1.Size = new System.Drawing.Size(22, 24);
-            this.linkLabele1.TabIndex = 28;
-            this.linkLabele1.TabStop = true;
-            this.linkLabele1.Text = "1";
-            this.linkLabele1.Visible = false;
+            this.checkBoxauto.AutoSize = true;
+            this.checkBoxauto.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.checkBoxauto.Location = new System.Drawing.Point(4, 289);
+            this.checkBoxauto.Name = "checkBoxauto";
+            this.checkBoxauto.Size = new System.Drawing.Size(138, 28);
+            this.checkBoxauto.TabIndex = 4;
+            this.checkBoxauto.Text = "自动前进";
+            this.checkBoxauto.UseVisualStyleBackColor = true;
             // 
             // GameForm
             // 
@@ -597,6 +657,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(1264, 728);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.infomation);
             this.Controls.Add(this.panelcave);
             this.Controls.Add(this.panelplayer);
@@ -614,6 +675,7 @@
             this.Load += new System.EventHandler(this.GameForm_Load);
             this.panelplayer.ResumeLayout(false);
             this.panelplayer.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).EndInit();
             this.panelcave.ResumeLayout(false);
             this.panelcave.PerformLayout();
             this.panelbattle.ResumeLayout(false);
@@ -621,7 +683,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxAttack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxEnemy)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPlayer)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -662,7 +725,6 @@
         private System.Windows.Forms.Button buttondata;
         private System.Windows.Forms.Panel panelbattle;
         private System.Windows.Forms.PictureBox pictureBoxAttack;
-        private System.Windows.Forms.Label labelbattle;
         private System.Windows.Forms.Label labelEhp;
         private System.Windows.Forms.Label labelPhp;
         private System.Windows.Forms.PictureBox pictureBoxEnemy;
@@ -671,5 +733,11 @@
         private System.Windows.Forms.Label labele1;
         private System.Windows.Forms.LinkLabel linkLabele2;
         private System.Windows.Forms.LinkLabel linkLabele1;
+        private System.Windows.Forms.TextBox labelbattle;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox textBoxpage;
+        private System.Windows.Forms.Button buttonextpage;
+        private System.Windows.Forms.Button buttonllastpage;
+        private System.Windows.Forms.CheckBox checkBoxauto;
     }
 }
