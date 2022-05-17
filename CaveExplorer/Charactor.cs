@@ -25,6 +25,7 @@ namespace CaveExplorer
     {
         Happy=0,
         Angry,
+        Afraid,
         Sad,
         God,
         None
@@ -122,6 +123,10 @@ namespace CaveExplorer
             {
                 mood = Mood.Sad;
             }
+            else if(temp[8]== "Afraid")
+            {
+                mood = Mood.Afraid;
+            }
             else if (temp[8] == "God")
             {
                 mood = Mood.God;
@@ -146,6 +151,25 @@ namespace CaveExplorer
                     }
                     else
                     {
+                        if (bag[i].result.hpchange > 0)
+                        {
+                            info += "生命";
+                            if (maxhp - hp > bag[i].result.hpchange)
+                            {
+                                hp += bag[i].result.hpchange;
+                                info += "恢复了" + bag[i].result.hpchange.ToString() + "点，";
+                            }
+                            else if (maxhp - hp <= bag[i].result.hpchange && maxhp != hp)
+                            {
+                                info += "恢复了" + (maxhp - hp).ToString() + "点，";
+                                hp = maxhp;
+                            }
+                            else
+                            {
+                                info += "已满，无法恢复，";
+                            }
+                            info += "效果来自物品：" + bag[i].name + "。\r\n";
+                        }
                         bag[i].result.timelast--;
                     }
                 }
@@ -159,6 +183,25 @@ namespace CaveExplorer
                 }
                 else
                 {
+                    if (events[i].result.hpchange > 0)
+                    {
+                        info += "生命";
+                        if (maxhp - hp > events[i].result.hpchange)
+                        {
+                            hp += events[i].result.hpchange;
+                            info += "恢复了" + events[i].result.hpchange.ToString() + "点，";
+                        }
+                        else if (maxhp - hp <= events[i].result.hpchange && maxhp != hp)
+                        {
+                            info += "恢复了" + (maxhp - hp).ToString() + "点，";
+                            hp = maxhp;
+                        }
+                        else
+                        {
+                            info += "已满，无法恢复，";
+                        }
+                        info += "效果来自事件：" + events[i].name + "。\r\n";
+                    }
                     events[i].result.timelast--;
                 }
             }
@@ -476,7 +519,8 @@ namespace CaveExplorer
                     rec = delta;
                 }
                 player.hp += rec;
-                e2 = "恢复了" + rec + "点血量。";
+                player.atk += 5;
+                e2 = "恢复了" + rec + "点血量，并增加了5点攻击。";
             }
             return "[物品信息]" + name + "的效果消失了。" + e2 + "\r\n";
         }

@@ -45,6 +45,7 @@ namespace CaveExplorer
             checkBoxauto.BackColor = Color.Transparent;
             labelPhp.BackColor = Color.Transparent;
             labelEhp.BackColor = Color.Transparent;
+            labelscore.BackColor = Color.Transparent;
             player = p;
             this.parent = parent;
         }
@@ -195,7 +196,7 @@ namespace CaveExplorer
             {
                 case Jobs.Fighter:
                     charactorPhoto.Image = Properties.Resources.fighter;
-                    phototip.SetToolTip(charactorPhoto, "斗士：\r\n基础暴击率从15%提升至25%。");
+                    phototip.SetToolTip(charactorPhoto, "斗士：\r\n基础暴击率从15%提升至35%。");
                     break;
                 case Jobs.Engineer:
                     charactorPhoto.Image = Properties.Resources.engineer;
@@ -203,19 +204,19 @@ namespace CaveExplorer
                     break;
                 case Jobs.Believer:
                     charactorPhoto.Image = Properties.Resources.believer;
-                    phototip.SetToolTip(charactorPhoto, "信徒：\r\n每走一步回复1点血量。");
+                    phototip.SetToolTip(charactorPhoto, "信徒：\r\n每走一步回复3点血量。");
                     break;
                 case Jobs.Fighter2:
                     charactorPhoto.Image = Properties.Resources.fighter2;
-                    phototip.SetToolTip(charactorPhoto, "血斗士：\r\n斗士的转职。\r\n基础暴击率从15%提升至25%，并有10%的吸血。");
+                    phototip.SetToolTip(charactorPhoto, "血斗士：\r\n斗士的转职。\r\n基础暴击率从15%提升至35%，并有10%的吸血。");
                     break;
                 case Jobs.Engineer2:
                     charactorPhoto.Image = Properties.Resources.engineer2;
-                    phototip.SetToolTip(charactorPhoto, "机械师：\r\n工程师的转职。\r\n背包从10格提升至12格，每次丢弃物品或失去buff会恢复20点血量。");
+                    phototip.SetToolTip(charactorPhoto, "机械师：\r\n工程师的转职。\r\n背包从10格提升至12格，每次丢弃物品或失去buff会恢复20点血量，并增加5点攻击。");
                     break;
                 case Jobs.Believer2:
                     charactorPhoto.Image = Properties.Resources.believer2;
-                    phototip.SetToolTip(charactorPhoto, "圣徒：\r\n信徒的转职。\r\n每走一步回复1点血量，并增加1点随机属性。");
+                    phototip.SetToolTip(charactorPhoto, "圣徒：\r\n信徒的转职。\r\n每走一步回复3点血量，并增加1点随机属性。");
                     break;
             }
             if (player.hp <= 0)
@@ -246,6 +247,9 @@ namespace CaveExplorer
                         break;
                     case Mood.God:
                         status_now += "天神下凡";
+                        break;
+                    case Mood.Afraid:
+                        status_now += "恐惧";
                         break;
                 }
                 labelstatus.Text = status_now;
@@ -345,6 +349,10 @@ namespace CaveExplorer
                 buttonllastpage.Enabled = true;
                 buttonextpage.Enabled = true;
             }
+            if (page > steps)
+            {
+                page = steps;
+            }
             if (page > 0)
             {
                 infomation.Text = infos[page - 1];
@@ -400,17 +408,24 @@ namespace CaveExplorer
             File.WriteAllText(path, save);
         }
 
-        public void SaveScore(bool win)
+        public int GetScore()
         {
-            //保存最高分
-            int score = player.hp * 5 + player.atk * 15 + player.agi * 10 + player.def * 20 + player.luck * 15;
-            score += player.stats.items * 3 + player.stats.useitems * 5 - player.stats.dropitems * 2;
-            score += player.stats.events * 5 + player.stats.enemykill.Sum() * 2;
+            //获取分数
+            int score = player.atk * 5 + player.agi * 3 + player.def * 3 + player.luck * 3 + player.maxhp * 2;
+            score += player.stats.items * 3 + player.stats.useitems * 2 - player.stats.dropitems * 1;
+            score += player.stats.events * 5 + player.stats.enemykill.Sum() * 3;
             score += player.stats.enemy.Count * 10;
             if (allwin)
             {
-                score += 5000;
+                score += 10000;
             }
+            return score;
+        }
+
+        public void SaveScore(bool win)
+        {
+            //保存最高分
+            int score = GetScore();
             string info = "";
             if (win)
             {
@@ -497,6 +512,7 @@ namespace CaveExplorer
         public async Task NextStep()
         {
             //下一步
+            labelscore.Text = "当前分数：" + GetScore().ToString();
             steps++;
             pageindex = steps;
             infomation.Text = "               ~洞穴探险进行中！第" + steps.ToString() + "步~\r\n";
@@ -505,12 +521,12 @@ namespace CaveExplorer
             int index = rr.Next(0, 100);
             int[] caveindex = GetCaveIndex(steps);
             Caves newcave;
-            if (index < 60)
+            if (index < 50)
             {
                 newcave = new Caves(fightcaves[rr.Next(0, caveindex[0])]);
                 player.stats.AddEnemy(newcave);
             }
-            else if (index < 85)
+            else if (index < 80)
             {
                 newcave = new Caves(eventcaves[rr.Next(0, caveindex[2])]);
                 player.stats.events++;
@@ -549,7 +565,7 @@ namespace CaveExplorer
                 //boss战
                 int bosshp = 2000 + rr.Next(1000);
                 int bossatk = player.def / 2 + 5 + rr.Next(15);
-                int bossdef = player.atk * 2 - 10 - rr.Next(30);
+                int bossdef = player.atk + 100 - rr.Next(30);
                 newcave = new Caves(CaveType.Fight, "多元虚空魔王," + bosshp + "," + bossatk + ",1000," + bossdef + ",0,0");
             }
             ItemEventPanel iep = new ItemEventPanel(true, panelbattle, pictureBoxAttack, labelbattle);
@@ -579,7 +595,7 @@ namespace CaveExplorer
             {
                 FreshPhoto();
                 isLup = true;
-                infomation.AppendText("[职业信息]你已转职成为——机械师！你每次丢弃物品或失去buff可以恢复20点血量。");
+                infomation.AppendText("[职业信息]你已转职成为——机械师！你每次丢弃物品或失去buff可以恢复20点血量，并增加5点攻击。");
             }
             else if (!isLup && player.job == Jobs.Believer2)
             {
@@ -591,8 +607,9 @@ namespace CaveExplorer
             {
                 if (player.hp < player.maxhp)
                 {
-                    player.hp++;
-                    infomation.AppendText("[信徒]你回复了1点血量。\r\n");
+                    int add = player.maxhp - player.hp < 3 ? player.maxhp - player.hp : 3;
+                    player.hp+=add;
+                    infomation.AppendText("[信徒]你回复了" + add + "点血量。\r\n");
                 }
                 else
                 {
@@ -627,8 +644,9 @@ namespace CaveExplorer
                 }
                 if (player.hp < player.maxhp)
                 {
-                    player.hp++;
-                    infomation.AppendText("，你回复了1点血量。\r\n");
+                    int add = player.maxhp - player.hp < 3 ? player.maxhp - player.hp : 3;
+                    player.hp += add;
+                    infomation.AppendText("，你回复了" + add + "点血量。\r\n");
                 }
                 else
                 {
@@ -642,10 +660,12 @@ namespace CaveExplorer
             {
                 infomation.AppendText("你打败了魔王！你已成功通关！");
                 allwin = true;
+                labelscore.Text = "当前分数：" + GetScore().ToString();
                 SaveScore(allwin);
             }
             infos.Add(infomation.Text);
             FreshPage(pageindex);
+            labelscore.Text = "当前分数：" + GetScore().ToString();
             if (allwin)
             {
                 if (MessageBox.Show("是否直接退出？", "您已通关！", MessageBoxButtons.OKCancel) == DialogResult.OK)
@@ -782,6 +802,20 @@ namespace CaveExplorer
             //下一页
             pageindex++;
             FreshPage(pageindex);
+        }
+
+        private void buttonsave_Click(object sender, EventArgs e)
+        {
+            //保存游戏
+            try
+            {
+                SaveGame();
+                MessageBox.Show("游戏已保存！");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("保存失败！" + ex.Message);
+            }
         }
     }
 }

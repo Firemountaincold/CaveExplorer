@@ -22,21 +22,32 @@ namespace CaveExplorer
             groupBoxjob.BackColor = Color.Transparent;
         }
 
-        private void buttonroll_Click(object sender, EventArgs e)
+        public void FreshFeatures()
         {
-            //随机属性值
-            Random random = new Random();
-            features[0] = 2 + random.Next(0, 20);
-            features[1] = 2 + random.Next(0, (53 - features[0]) / 4);
-            features[2] = 2 + random.Next(0, (52 - features[0] - features[1]) / 3);
-            features[3] = 2 + random.Next(0, (51 - features[0] - features[1] - features[2]) / 2);
-            features[4] = 2 + random.Next(0, 50 - features[0] - features[1] - features[2] - features[3]);
+            //刷新属性值
             string info = " " + features[0].ToString().PadRight(2) +
                 "      " + features[1].ToString().PadRight(2) +
                 "      " + features[2].ToString().PadRight(2) +
                 "      " + features[3].ToString().PadRight(2) +
                 "      " + features[4].ToString().PadRight(2);
             labelfeature.Text = info;
+        }
+
+        private void buttonroll_Click(object sender, EventArgs e)
+        {
+            //随机属性值
+            Random random = new Random();
+            int basenum = 3;
+            if (rbEngineer.Checked)
+            {
+                basenum = 5;
+            }
+            features[0] = basenum + random.Next(0, 17);
+            features[1] = basenum + random.Next(0, (56 - features[0]) / 2);
+            features[2] = basenum + random.Next(0, (56 - features[0] - features[1]) * 2 / 3);
+            features[3] = basenum + random.Next(0, (56 - features[0] - features[1] - features[2]));
+            features[4] = basenum + 56 - features[0] - features[1] - features[2] - features[3];
+            FreshFeatures();
         }
 
         private void buttonload_Click(object sender, EventArgs e)
@@ -115,7 +126,7 @@ namespace CaveExplorer
         {
             if (rbFighter.Checked)
             {
-                labeldescription.Text = "斗士：基础暴击率从15%提升至25%。";
+                labeldescription.Text = "斗士：基础暴击率从15%提升至35%。";
             }
         }
 
@@ -123,15 +134,27 @@ namespace CaveExplorer
         {
             if (rbEngineer.Checked)
             {
-                labeldescription.Text = "工程师：背包从10格提升至12格。";
+                labeldescription.Text = "工程师：背包从10格提升至12格，10点属性奖励。";
+                for (int i = 0; i < features.Length; i++)
+                {
+                    features[i] += 2;
+                }
             }
+            else
+            {
+                for(int i = 0; i < features.Length; i++)
+                {
+                    features[i] -= 2;
+                }
+            }
+            FreshFeatures();
         }
 
         private void rbBeliever_CheckedChanged(object sender, EventArgs e)
         {
             if (rbBeliever.Checked)
             {
-                labeldescription.Text = "信徒：每走一步回复1点血量。";
+                labeldescription.Text = "信徒：每走一步回复3点血量。";
             }
         }
     }

@@ -62,6 +62,7 @@
             this.hpBar = new System.Windows.Forms.ProgressBar();
             this.infomation = new System.Windows.Forms.RichTextBox();
             this.panelcave = new System.Windows.Forms.Panel();
+            this.checkBoxauto = new System.Windows.Forms.CheckBox();
             this.panelbattle = new System.Windows.Forms.Panel();
             this.labelbattle = new System.Windows.Forms.TextBox();
             this.pictureBoxAttack = new System.Windows.Forms.PictureBox();
@@ -76,7 +77,8 @@
             this.textBoxpage = new System.Windows.Forms.TextBox();
             this.buttonextpage = new System.Windows.Forms.Button();
             this.buttonllastpage = new System.Windows.Forms.Button();
-            this.checkBoxauto = new System.Windows.Forms.CheckBox();
+            this.labelscore = new System.Windows.Forms.Label();
+            this.buttonsave = new System.Windows.Forms.Button();
             this.panelplayer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.charactorPhoto)).BeginInit();
             this.panelcave.SuspendLayout();
@@ -470,6 +472,8 @@
             this.panelcave.BackgroundImage = global::CaveExplorer.Properties.Resources.cave1;
             this.panelcave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panelcave.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panelcave.Controls.Add(this.buttonsave);
+            this.panelcave.Controls.Add(this.labelscore);
             this.panelcave.Controls.Add(this.checkBoxauto);
             this.panelcave.Controls.Add(this.panelbattle);
             this.panelcave.Controls.Add(this.buttondata);
@@ -480,6 +484,17 @@
             this.panelcave.Name = "panelcave";
             this.panelcave.Size = new System.Drawing.Size(916, 404);
             this.panelcave.TabIndex = 2;
+            // 
+            // checkBoxauto
+            // 
+            this.checkBoxauto.AutoSize = true;
+            this.checkBoxauto.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.checkBoxauto.Location = new System.Drawing.Point(4, 289);
+            this.checkBoxauto.Name = "checkBoxauto";
+            this.checkBoxauto.Size = new System.Drawing.Size(138, 28);
+            this.checkBoxauto.TabIndex = 4;
+            this.checkBoxauto.Text = "自动前进";
+            this.checkBoxauto.UseVisualStyleBackColor = true;
             // 
             // panelbattle
             // 
@@ -640,16 +655,28 @@
             this.buttonllastpage.UseVisualStyleBackColor = true;
             this.buttonllastpage.Click += new System.EventHandler(this.buttonllastpage_Click);
             // 
-            // checkBoxauto
+            // labelscore
             // 
-            this.checkBoxauto.AutoSize = true;
-            this.checkBoxauto.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.checkBoxauto.Location = new System.Drawing.Point(4, 289);
-            this.checkBoxauto.Name = "checkBoxauto";
-            this.checkBoxauto.Size = new System.Drawing.Size(138, 28);
-            this.checkBoxauto.TabIndex = 4;
-            this.checkBoxauto.Text = "自动前进";
-            this.checkBoxauto.UseVisualStyleBackColor = true;
+            this.labelscore.AutoSize = true;
+            this.labelscore.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.labelscore.Location = new System.Drawing.Point(26, 213);
+            this.labelscore.Name = "labelscore";
+            this.labelscore.Size = new System.Drawing.Size(130, 24);
+            this.labelscore.TabIndex = 5;
+            this.labelscore.Text = "当前分数：";
+            // 
+            // buttonsave
+            // 
+            this.buttonsave.BackColor = System.Drawing.Color.Azure;
+            this.buttonsave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonsave.Location = new System.Drawing.Point(150, 254);
+            this.buttonsave.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonsave.Name = "buttonsave";
+            this.buttonsave.Size = new System.Drawing.Size(140, 68);
+            this.buttonsave.TabIndex = 6;
+            this.buttonsave.Text = "保存游戏";
+            this.buttonsave.UseVisualStyleBackColor = false;
+            this.buttonsave.Click += new System.EventHandler(this.buttonsave_Click);
             // 
             // GameForm
             // 
@@ -739,5 +766,7 @@
         private System.Windows.Forms.Button buttonextpage;
         private System.Windows.Forms.Button buttonllastpage;
         private System.Windows.Forms.CheckBox checkBoxauto;
+        private System.Windows.Forms.Label labelscore;
+        private System.Windows.Forms.Button buttonsave;
     }
 }

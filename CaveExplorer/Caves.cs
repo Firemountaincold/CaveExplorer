@@ -62,6 +62,7 @@ namespace CaveExplorer
         int def;
         int itemid;
         public int step;
+        public int itemratio;
 
         public Fights(Fights fights)
         {
@@ -72,6 +73,7 @@ namespace CaveExplorer
             def = fights.def;
             itemid = fights.itemid;
             step = fights.step;
+            itemratio = fights.itemratio;
         }
 
         public Fights(string fightline)
@@ -84,6 +86,7 @@ namespace CaveExplorer
             def = Convert.ToInt32(temp[4]);
             itemid = Convert.ToInt32(temp[5]);
             step = Convert.ToInt32(temp[6]);
+            itemratio = Convert.ToInt32(temp[7]);
         }
 
         public async Task<string> FightWith(Charactor player, List<Items> items, Battle battle, ItemEventPanel iep)
@@ -95,23 +98,27 @@ namespace CaveExplorer
             int atkchange = 0;
             int agichange = 0;
             int defchange = 0;
-            if(player.mood==Mood.Happy)
+            if (player.mood == Mood.Happy)
             {
                 atkchange = 2;
             }
-            else if(player.mood == Mood.Angry)
+            else if (player.mood == Mood.Angry)
             {
-                agichange = - player.agi / 2;
+                agichange = -player.agi / 2;
                 atkchange = 4;
             }
-            else if(player.mood==Mood.Sad)
+            else if (player.mood == Mood.Sad)
             {
-                defchange = - player.def / 2;
+                defchange = -player.def / 2;
             }
-            else if(player.mood==Mood.God)
+            else if (player.mood == Mood.God)
             {
                 atkchange = player.atk;
                 defchange = player.def;
+            }
+            else if (player.mood == Mood.Afraid) 
+            {
+                atkchange = -player.atk / 5;
             }
             if(player.agi + agichange>=agi)
             {
@@ -125,7 +132,7 @@ namespace CaveExplorer
             int critratio = 84;
             if (player.job == Jobs.Fighter || player.job == Jobs.Fighter2) 
             {
-                critratio = 74;
+                critratio = 64;
             }
             while (player.hp > 0 || hp > 0)
             {
@@ -180,7 +187,7 @@ namespace CaveExplorer
                     {
                         await battle.BattleEnd(win);
                         info += "，" + demonname + "死了。\r\n";
-                        if (r.Next(0, 50) < player.luck + 10)
+                        if (itemratio + player.luck / 2 > r.Next(100))
                         {
                             info += await player.GetItem(items[itemid], iep, 0);
                         }
@@ -292,7 +299,7 @@ namespace CaveExplorer
                     {
                         await battle.BattleEnd(win);
                         info += "，" + demonname + "死了。\r\n";
-                        if (r.Next(0, 100) < player.luck + 10)
+                        if (itemratio + player.luck / 2 > r.Next(100)) 
                         {
                             info += await player.GetItem(items[itemid], iep, 0);
                         }
@@ -373,6 +380,10 @@ namespace CaveExplorer
             else if (temp[11] == "God")
             {
                 result.moodchange = Mood.God;
+            }
+            else if (temp[11] == "Afraid")
+            {
+                result.moodchange = Mood.Afraid;
             }
             else
             {
@@ -511,6 +522,9 @@ namespace CaveExplorer
                         break;
                     case Mood.God:
                         info += "天神下凡（攻击、防御大幅提升）,";
+                        break;
+                    case Mood.Afraid:
+                        info += "恐惧（攻击下降），";
                         break;
                 }
             }
